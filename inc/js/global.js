@@ -1,0 +1,85 @@
+
+
+/**
+ * Fungsi untuk format uang onkeyup
+ */
+
+
+function FormatCurrency(objNum)
+{
+    var num = objNum.value
+    var ent, dec;
+    if (num != '' && num != objNum.oldvalue)
+    {
+        num = MoneyToNumber(num);
+        if (isNaN(num))
+        {
+            objNum.value = (objNum.oldvalue) ? objNum.oldvalue : '';
+        } else {
+            var ev = (navigator.appName.indexOf('Netscape') != -1) ? Event : event;
+            if (ev.keyCode == 190 || !isNaN(num.split('.')[1]))
+            {
+                alert(num.split('.')[1]);
+                objNum.value = AddCommas(num.split('.')[0]) + '.' + num.split('.')[1];
+            }
+            else
+            {
+                objNum.value = AddCommas(num.split('.')[0]);
+            }
+            objNum.oldvalue = objNum.value;
+        }
+    }
+}
+function MoneyToNumber(num)
+{
+    return (num.replace(/,/g, ''));
+}
+
+function AddCommas(num)
+{
+    numArr = new String(num).split('').reverse();
+    for (i = 3; i < numArr.length; i += 3)
+    {
+        numArr[i] += ',';
+    }
+    return numArr.reverse().join('');
+}
+
+function formatCurrency(num) {
+    num = num.toString().replace(/\$|\,/g, '');
+    if (isNaN(num))
+        num = "0";
+    sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num * 100 + 0.50000000001);
+    cents = num0;
+    num = Math.floor(num / 100).toString();
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+        num = num.substring(0, num.length - (4 * i + 3)) + '.' +
+                num.substring(num.length - (4 * i + 3));
+    return (((sign) ? '' : '-') + num);
+}
+
+$(document).ready(function () {
+    // inital content
+    var base_url = window.location.origin; // mengambil base url dari javascript
+    //alert(base_url);
+    //$('#content').load(base_url + '/pemkot/ppu');
+    var index=1;
+    $('a#link-menu').click(function () {
+
+        // var page = $(this).attr('href');
+        //$('#content').load(base_url + '/pemkot/' + page);
+        //alert(base_url+'/pemkot/'+page);
+        index++;
+        $('#tt').tabs('add', {
+            title: 'Tab' + index,
+            content: '<div style="padding:10px">Content' + index + '</div>',
+            closable: true
+        });
+
+        return false;
+    });
+
+
+});
+
