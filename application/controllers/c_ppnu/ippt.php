@@ -12,7 +12,7 @@ class Ippt extends CI_Controller{
             
             $d['list_ippt'] = $this->m_ippt->list_ippt();
             
-            $d['content'] = 'ppnu/ippt';
+            $d['content'] = 'ppnu/ippt/lf_ippt';
             $this->load->view('template',$d);
         } else {
             header('location:' . base_url() . '');

@@ -4,12 +4,20 @@ class Pegawai extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        
+        //Load Model
+        $this->load->model('master/m_pegawai');
     }
 
-    function index() {
+    function index(){
         if ($this->session->userdata('is_log') != "") {
+            
+            //Isi Data
+            $d['listPegawai'] = $this->m_pegawai->getListPegawai();
+            //include content
             $d['content'] = 'master/pegawai';
-            $this->load->view('template', $d);
+            $this->load->view('template',$d);
+            
         } else {
             header('location:' . base_url() . '');
         }
@@ -34,9 +42,15 @@ class Pegawai extends CI_Controller {
      */
 
     function saved() {
-        if ($result = $this->m_pegawai->save()) {
+        if ($result = $this->m_pegawai->saved()) {
             echo json_encode(array('success' => $result));
         }
     }
-
+    
+    function delete(){
+        if($this->m_pegawai->deleted()){
+            echo json_encode(['success'=>true]);
+        }
+    }
+    
 }

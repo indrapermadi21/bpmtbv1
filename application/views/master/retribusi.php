@@ -3,13 +3,12 @@
     $(document).ready(function () {
         var panel_list = $('#panel_list');
         var panel_form = $('#panel_form');
-
         //init 
         panel_form.hide();
-        $('#retribusi_table').dataTable();
-
+        $('#retribusi_table').DataTable({
+            
+        });
     });
-
     //kembali ke tampillan tabel 
     function back_grid() {
         $('#panel_form').hide();
@@ -27,59 +26,45 @@
 
     //fungsi untuk proses save data
     function save_menu() {
-        var form_status = $('#form_status').val();
-
-        var data = {
-            menu_name: $('#menu_name').val(),
-            menu_group_id: $('#menu_group_id').val(),
-            path: $('#path').val(),
-            menu_desc: $('#menu_desc').val(),
-            id_retribusi: $('#id_retribusi').val()
+        var data = {    
+            'id_retribusi':$('#id_retribusi').val(),
+            'kategori': $('#kategori').val(),
+            'nama': $('#nama').val(),
+            'jumlah_retribusi': $('#jumlah_retribusi').val(),
+            'form_status': $('#form_status').val()
         };
 
-
-        if (form_status == 'add') {
-            $.post('<?php echo base_url() ?>administrasi/menu/save', data, function (r) {
-                alert(r.success);
-
-                if (r.success) {
-                    window.location.href = '<?php echo base_url() ?>administrasi/menu';
-                }
-            }, 'json')
-        } else {
-            $.post('<?php echo base_url() ?>administrasi/menu/edit', data, function (r) {
-                if (r.success) {
-                    window.location.href = '<?php echo base_url() ?>administrasi/menu';
-                }
-            }, 'json')
-        }
+        $.post('<?php echo base_url() ?>master/retribusi/saved', data, function (r) {
+            if (r.success) {
+                window.location.href = '<?php echo base_url() ?>master/retribusi';
+            }
+        }, 'json');
     }
 
     function edit_retribusi(el) {
-
-        $.post('<?php echo base_url() ?>administrasi/menu/get_menu', {
+        $.post('<?php echo base_url() ?>master/retribusi/getRetribusi', {
             id_retribusi: el
         }, function (r) {
             if (r) {
                 $('#id_retribusi').val(r.data.id_retribusi);
-                $('#menu_name').val(r.data.name);
-                $('#menu_desc').val(r.data.description);
-                $('#menu_group_id').val(r.data.menu_group_id);
-                $('#path').val(r.data.url);
+                $('#kategori').val(r.data.kategori);
+                $('#nama').val(r.data.nama);
+                $('#jumlah_retribusi').val(r.data.jumlah_retribusi);
                 $('#form_status').val('edit');
                 $('#panel_list').hide();
                 $('#panel_form').show();
-
             }
         }, 'json');
     }
 
     function remove_retribusi(el) {
-        $.post('<?php echo base_url() ?>administrasi/menu/delete', {
+        $.post('<?php echo base_url() ?>master/retribusi/delete', {
             id_retribusi: el
-        }, function () {
-            window.location.href = '<?php echo base_url() ?>administrasi/menu';
-        })
+        }, function (r) {
+            if(r.success){
+                window.location.href = '<?php echo base_url() ?>master/retribusi';
+            }
+        },'json');
     }
 </script>
 
@@ -103,14 +88,54 @@
                                         <th style="width: 20px">No.</th>
                                         <th style="width: 150px;">Kategori</th>
                                         <th style="width: 150px;">Nama</th>
-                                        <th style="width: 300px;">Jumlah Retribusi</th>
-                                        <th style="width: 100px;"></th>
-                                        <th style="width: 100px;"></th>
+                                        <th style="width: 150px;">Jumlah Retribusi</th>
+                                        <th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    
+                                   <?php
+                                    $i = 1;
+                                    foreach ($listRetribusi as $r) {
+                                        if($r['status']==1){
+                                            $color ='red';
+                                        }else{
+                                            $color ='black';
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td><font color="<?php echo $color?>"><?php echo $i?></font></td>
+                                            <td><font color="<?php echo $color?>"><?php echo $r['kategori']?></font></td>
+                                            <td><font color="<?php echo $color?>"><?php echo $r['nama']?></font></td>
+                                            <td><font color="<?php echo $color?>"><?php echo $r['jumlah_retribusi']?></font></td>
+                                            <td>
+                                                <?php if ($r['status']!= 1) { ?>
+                                                <button class="btn btn-info" type="button" id="edit_retribusi" onclick="edit_retribusi(<?php echo $r['id_retribusi'] ?>)"><i class="fa fa-pencil"></i></button>
+                                                <?php } else { ?>
+                                                    <div style="text-align: center">-</div>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($r['status']!= 1) { ?>
+                                                    <button class="btn btn-warning" type="button" id="remove_retribusi" onclick="remove_retribusi(<?php echo $r['id_retribusi'] ?>)"><i class="fa fa-trash"></i></button>
+                                                <?php } else { ?>
+                                                    <div style="text-align: center">-</div>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success" type="button" id="print" onclick="print_retribusi(<?php echo $r['id_retribusi'] ?>, '')"><i class="fa fa-print"></i></button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary" type="button" id="print" onclick="print_retribusi(<?php echo $r['id_retribusi'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    } //End of foreach
+                                    ?>
                                 </tbody>
                             </table>
                         </div>

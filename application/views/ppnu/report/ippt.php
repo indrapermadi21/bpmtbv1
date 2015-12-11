@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>IPPT</title>
+        <title>IPP</title>
     </head>
     <body>
         <table align="center" border="0" width="1024px" style="padding: 0">
@@ -337,7 +337,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td colspan="3" align="center"><strong>Pemohon</strong></td>
+                <td colspan="3" align="center"><strong>Pemohn</strong></td>
             </tr>
             <tr>
                 <td></td>

@@ -6,33 +6,7 @@
         //init 
         panel_form.hide();
         $('#pegawai_table').DataTable({
-            "bProcessing": true,
-            "bServerSide": true,
-            "iDisplayLength": 20,
-//"bPaginate": true,
-            "bAutoWidth": false,
-            "iDisplayStart": 0,
-            "bLengthChange": false, //for sorting 10,20,30,50 ....
-            "sAjaxSource": "<?php echo base_url() ?>master/pegawai/getDataPegawai",
-            "aaSorting": [[1, "desc"]],
-            //"sPaginationType": "full_numbers",
-            "aoColumns": [
-                {"data":"nip","bSearchable": false, "bSortable": false},
-                {"data":"nama_lengkap","bSearchable": true, "bSortable": true},
-                {"data":"jabatan","bSearchable": false, "bSortable": false}
-            ],
-            "fnServerData": function (sSource, aoData, fnCallback) {
-                $.ajax(
-                        {
-                            'dataType': 'json',
-                            'type': 'POST',
-                            'url': sSource,
-                            'data': aoData,
-                            'success': fnCallback
-                        }
-                );//end ajx
-                // console.log(fnCallback);
-            }
+            
         });
     });
     //kembali ke tampillan tabel 
@@ -52,28 +26,29 @@
 
     //fungsi untuk proses save data
     function save_menu() {
-        var data = {
+        var data = {    
             'nip': $('#nip').val(),
-            'nama_lengkap': $('#nama_lengkap').val(),
+            'nama_pegawai': $('#nama_pegawai').val(),
             'jabatan': $('#jabatan').val(),
             'form_status': $('#form_status').val()
         };
 
         $.post('<?php echo base_url() ?>master/pegawai/saved', data, function (r) {
             if (r.success) {
-
+                window.location.href = '<?php echo base_url() ?>master/pegawai';
             }
         }, 'json');
     }
 
-    function editPegawai(el) {
-
+    function edit_pegawai(el) {
         $.post('<?php echo base_url() ?>master/pegawai/getPegawai', {
             nip: el
         }, function (r) {
+            
             if (r) {
                 $('#nip').val(r.data.nip);
-                $('#nama_lengkap').val(r.data.nama_lengkap);
+                $('#nip').attr('readonly', true);
+                $('#nama_pegawai').val(r.data.nama_pegawai);
                 $('#jabatan').val(r.data.jabatan);
                 $('#form_status').val('edit');
                 $('#panel_list').hide();
@@ -83,24 +58,25 @@
     }
 
     function remove_pegawai(el) {
-        $.post('<?php echo base_url() ?>administrasi/menu/delete', {
-            id_pegawai: el
-        }, function () {
-            window.location.href = '<?php echo base_url() ?>administrasi/menu';
-        });
+        $.post('<?php echo base_url() ?>master/pegawai/delete', {
+            nip: el
+        }, function (r) {
+            if(r.success){
+                window.location.href = '<?php echo base_url() ?>master/pegawai';
+            }
+        },'json');
     }
 </script>
 
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-lg-12">
             <div class="box">
                 <div class="box-header">
                     <!--strong><center><h2>Menu</h2></center></strong-->
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive">
-
 
                     <div id="panel_list" class="panel panel-default">
                         <div class="panel-heading"><a href="#" id="create_pegawai" onclick="create_pegawai()"><i class="fa fa-plus-square fa-2x"></i></a></div>
@@ -111,14 +87,54 @@
                                         <th style="width: 20px">No.</th>
                                         <th style="width: 150px;">NIP</th>
                                         <th style="width: 150px;">Nama</th>
-                                        <th style="width: 300px;">Jabatan</th>
-                                        <th style="width: 100px;"></th>
-                                        <th style="width: 100px;"></th>
+                                        <th style="width: 150px;">Jabatan</th>
+                                        <th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-
+                                   <?php
+                                    $i = 1;
+                                    foreach ($listPegawai as $r) {
+                                        if($r['status']==1){
+                                            $color ='red';
+                                        }else{
+                                            $color ='black';
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td><font color="<?php echo $color?>"><?php echo $i?></font></td>
+                                            <td><font color="<?php echo $color?>"><?php echo $r['nip']?></font></td>
+                                            <td><font color="<?php echo $color?>"><?php echo $r['nama_pegawai']?></font></td>
+                                            <td><font color="<?php echo $color?>"><?php echo $r['jabatan']?></font></td>
+                                            <td>
+                                                <?php if ($r['status']!= 1) { ?>
+                                                <button class="btn btn-info" type="button" id="edit_pegawai" onclick="edit_pegawai(<?php echo $r['nip'] ?>)"><i class="fa fa-pencil"></i></button>
+                                                <?php } else { ?>
+                                                    <div style="text-align: center">-</div>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($r['status']!= 1) { ?>
+                                                    <button class="btn btn-warning" type="button" id="remove_pegawai" onclick="remove_pegawai(<?php echo $r['nip'] ?>)"><i class="fa fa-trash"></i></button>
+                                                <?php } else { ?>
+                                                    <div style="text-align: center">-</div>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success" type="button" id="print" onclick="print_pegawai(<?php echo $r['nip'] ?>, '')"><i class="fa fa-print"></i></button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary" type="button" id="print" onclick="print_pegawai(<?php echo $r['nip'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    } //End of foreach
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -140,30 +156,29 @@
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-xs-2">
+                                            <div class="col-lg-2">
                                                 <label for="nip">NIP : </label>
                                             </div>
-                                            <div class="col-xs-4">
+                                            <div class="col-lg-4">
                                                 <input type="text" class="form-control input-sm" id="nip"/>
                                             </div>
                                         </div>
                                         <br/>
                                         <div class="row">
-                                            <div class="col-xs-2">
+                                            <div class="col-lg-2">
                                                 <label for="nama_pegawai">Nama Pegawai : </label>
                                             </div>
-                                            <div class="col-xs-4">
-                                                <input type="hidden" id="form_status" >
+                                            <div class="col-lg-4">
                                                 <input type="hidden" id="id_pegawai" >
                                                 <input type="text" class="form-control input-sm" id="nama_pegawai"/>
                                             </div>
                                         </div>
                                         <br/>
                                         <div class="row">
-                                            <div class="col-xs-2">
+                                            <div class="col-lg-2">
                                                 <label for="jabatan">Jabatan : </label>
                                             </div>
-                                            <div class="col-xs-4">
+                                            <div class="col-lg-4">
                                                 <input type="text" class="form-control input-sm" id="jabatan"/>
                                             </div>
                                         </div>

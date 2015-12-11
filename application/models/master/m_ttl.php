@@ -1,7 +1,6 @@
 <?php
 
-class M_pegawai extends CI_Model {
-
+Class M_ttl extends CI_Model{
     function saved() {
         $form_status = $this->input->post('form_status');
 
@@ -11,11 +10,11 @@ class M_pegawai extends CI_Model {
             'jabatan' => $this->input->post('jabatan')
         );
         $this->db->trans_begin();
-
+        
         if ($form_status == 'add') {
-            $this->db->insert('ms_pegawai',$data);
+            $this->db->insert('ms_ttl',$data);
         } else {
-            $this->db->query('UPDATE ms_pegawai SET nama_pegawai="'.$data['nama_pegawai'].'",jabatan="'.$data['jabatan'].'"
+            $this->db->query('UPDATE ms_ttl SET nama_pegawai="'.$data['nama_pegawai'].'",jabatan="'.$data['jabatan'].'"
                     WHERE nip="'.$data['nip'].'"');
         }
 
@@ -30,18 +29,20 @@ class M_pegawai extends CI_Model {
     
     function getPegawai(){
         $nip  = $this->input->post('nip');
-        return $this->db->query("SELECT * FROM ms_pegawai WHERE nip='".$nip."'")->row();
+        return $this->db->query("SELECT * FROM ms_ttl WHERE nip='".$nip."'")->row();
     }
     
     function getListPegawai(){
-        $results = $this->db->query("SELECT * FROM ms_pegawai")->result_array();
+        $results = $this->db->query("SELECT * FROM ms_ttl")->result_array();
         return $results;
         
     }
      
     function deleted(){
         $nip = $this->input->post('nip');
-        $this->db->query("UPDATE ms_pegawai SET status='1' where nip='".$nip."'");
+        $this->db->query("UPDATE ms_ttl SET status='1' where nip='".$nip."'");
         return true;
     }
+    
 }
+
