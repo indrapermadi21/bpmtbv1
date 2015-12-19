@@ -14,28 +14,51 @@
         //init 
         panel_form.hide();
         $('#tdg_table').dataTable();
-        
+
         $('#btn_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/setSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/tdg';
             });
         });
-        
-        $('#btn_reset_cari').click(function(){
+
+        $('#btn_reset_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/unsetSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/tdg';
             });
         });
+
+        // change kecamatan 
+        $('#kecamatan').change(function () {
+            $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#kecamatan').val()
+            }, function (obj) {
+                $('#kelurahan').html(obj);
+            });
+        });
+
+        // change lokasi kecamatan 
+        $('#lokasi_kec').change(function () {
+            $.post("<?php echo base_url() ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#lokasi_kec').val()
+            }, function (obj) {
+                $('#lokasi_kel').html(obj);
+            });
+
+        });
+
+
+
+
     });
 
     //kembali ke tampillan tabel 
@@ -48,6 +71,11 @@
     //memunculkan form menu
     function create_tdg() {
         $('#form_tdg').trigger('reset');
+        $('#jenis_perizinan').val('TANDA DAFTAR GUDANG');
+        $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
+        $('#jabatan').val('Pembina Utama Muda');
+        $('#nip').val('19610704 198603 1 013');
+        $('#jumlah_retribusi').val('10,000');
         $('#form_status').val('add');
         $('#panel_form').show();
         $('#panel_list').hide();
@@ -91,7 +119,7 @@
 
         $.post('<?php echo base_url() ?>c_ppu/tdg/save', data, function (r) {
             if (r.success) {
-                window.location.href = '<?php echo base_url() ?>administrasi/menu';
+                window.location.href = '<?php echo base_url() ?>c_ppu/tdg';
             }
         }, 'json');
     }
@@ -104,34 +132,44 @@
             if (r) {
                 $('#jenis_perizinan').val(r.data.jenis_perizinan);
                 $('#tgl_pembuatan').val(r.data.tgl_pembuatan),
-                $('#no_pelayanan').val(r.data.no_pelayanan),
-                $('#keterangan').val(r.data.keterangan),
-                $('#nama_perusahaan').val(r.data.nama_perusahaan),
-                $('#alamat_perusahaan').val(r.data.alamat_perusahaan),
-                $('#kota').val(r.data.kota),
-                $('#kecamatan').val(r.data.kecamatan),
-                $('#kelurahan').val(r.data.kelurahan),
-                $('#nama_pemilik').val(r.data.nama_pemilik),
-                $('#alamat_pemilik').val(r.data.alamat_pemilik),
-                $('#no_siup').val(r.data.no_siup),
-                $('#tgl_siup').val(r.data.tgl_siup),
-                $('#no_tdp').val(r.data.no_tdp),
-                $('#tgl_tdp').val(r.data.tgl_tdp),
-                $('#tmpt_keluar').val(r.data.tmpt_keluar),
-                $('#siui').val(r.data.siui),
-                $('#lokasi_prov').val(r.data.lokasi_prov),
-                $('#lokasi_kota').val(r.data.lokasi_kota),
-                $('#lokasi_kec').val(r.data.lokasi_kec),
-                $('#lokasi_kel').val(r.data.lokasi_kel),
-                $('#luas_gudang').val(r.data.luas_gudang),
-                $('#tgl_penetapan').val(r.data.tgl_penetapan),
-                $('#tgl_berlaku').val(r.data.tgl_berlaku),
-                $('#no_registrasi').val(r.data.no_registrasi),
-                $('#nama_pejabat').val(r.data.nama_pejabat),
-                $('#jabatan').val(r.data.jabatan),
-                $('#nip').val(r.data.nip),
-                $('#jumlah_retribusi').val(r.data.jumlah_retribusi),
-                $('#id_tdg').val(r.data.id_tdg);
+                        $('#no_pelayanan').val(r.data.no_pelayanan),
+                        $('#keterangan').val(r.data.keterangan),
+                        $('#nama_perusahaan').val(r.data.nama_perusahaan),
+                        $('#alamat_perusahaan').val(r.data.alamat_perusahaan),
+                        $('#kota').val(r.data.kota),
+                        $('#kecamatan').val(r.data.kecamatan),
+                        $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                            kd_kecamatan: r.data.kecamatan
+                        }, function (obj) {
+                            $('#kelurahan').html(obj);
+                            $('#kelurahan').val(r.data.kelurahan);
+                        });
+                        $('#nama_pemilik').val(r.data.nama_pemilik),
+                        $('#alamat_pemilik').val(r.data.alamat_pemilik),
+                        $('#no_siup').val(r.data.no_siup),
+                        $('#tgl_siup').val(r.data.tgl_siup),
+                        $('#no_tdp').val(r.data.no_tdp),
+                        $('#tgl_tdp').val(r.data.tgl_tdp),
+                        $('#tmpt_keluar').val(r.data.tmpt_keluar),
+                        $('#siui').val(r.data.siui),
+                        $('#lokasi_prov').val(r.data.lokasi_prov),
+                        $('#lokasi_kota').val(r.data.lokasi_kota),
+                        $('#lokasi_kec').val(r.data.lokasi_kec),
+                        $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                            kd_kecamatan: r.data.lokasi_kec
+                        }, function (obj) {
+                            $('#lokasi_kel').html(obj);
+                            $('#lokasi_kel').val(r.data.lokasi_kel);
+                        });
+                        $('#luas_gudang').val(r.data.luas_gudang),
+                        $('#tgl_penetapan').val(r.data.tgl_penetapan),
+                        $('#tgl_berlaku').val(r.data.tgl_berlaku),
+                        $('#no_registrasi').val(r.data.no_registrasi),
+                        $('#nama_pejabat').val(r.data.nama_pejabat),
+                        $('#jabatan').val(r.data.jabatan),
+                        $('#nip').val(r.data.nip),
+                        $('#jumlah_retribusi').val(r.data.jumlah_retribusi),
+                        $('#id_tdg').val(r.data.id_tdg);
                 $('#form_status').val('edit');
                 $('#panel_list').hide();
                 $('#panel_form').show();
@@ -140,11 +178,11 @@
     }
 
     function remove_tdg(el) {
-        $.post('<?php echo base_url() ?>administrasi/menu/delete', {
+        $.post('<?php echo base_url() ?>c_ppu/tdg/delete', {
             id_tdg: el
         }, function () {
-            window.location.href = '<?php echo base_url() ?>administrasi/menu';
-        });
+            window.location.href = '<?php echo base_url() ?>c_ppu/tdg';
+        }, 'json');
     }
 </script>
 
@@ -160,7 +198,7 @@
                     <div id="panel_list" class="panel panel-default">
                         <div class="panel-heading">
                             <a href="#" id="create_tdg" class="btn btn-info" onclick="create_tdg()"><i class="fa fa-plus-square fa"></i></a>
-                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
+                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal ?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir ?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
                         </div>
                         <div class="panel-body">
                             <div style="text-align: center"><h3>Tanda Daftar Gudang</h3></div>
@@ -176,8 +214,8 @@
                                         <th style="width: 150px;">Nama Pemilik</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
+                                        <!--th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -207,12 +245,12 @@
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
-                                            <td>
+                                            <!--td>
                                                 <button class="btn btn-success" type="button" id="print" onclick="print_tdg(<?php echo $r['id_tdg'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary" type="button" id="print" onclick="print_tdg(<?php echo $r['id_tdg'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
-                                            </td>
+                                            </td-->
                                         </tr>
                                         <?php
                                         $i++;
@@ -316,7 +354,16 @@
                                                         <label for="kecamatan">Kecamatan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kecamatan"/>
+                                                        <select class="form-control input-sm" id="kecamatan" >
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -325,7 +372,16 @@
                                                         <label for="kelurahan">Kelurahan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kelurahan"/>
+                                                        <select class="form-control input-sm" id="kelurahan">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -428,7 +484,16 @@
                                                         <label for="lokasi_kec">Kecamatan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="lokasi_kec"/>
+                                                        <select class="form-control input-sm" id="lokasi_kec">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -437,7 +502,16 @@
                                                         <label for="lokasi_kel">Kelurahan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="lokasi_kel"/>
+                                                        <select class="form-control input-sm" id="lokasi_kel">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>

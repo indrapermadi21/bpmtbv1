@@ -25,6 +25,7 @@
                 window.location.href = '<?php echo base_url() ?>c_ppu/iujk';
             });
         });
+        
 
         $('#btn_reset_cari').click(function () {
             var data = {
@@ -34,6 +35,15 @@
 
             $.post('<?php echo base_url() ?>c_ppu/tdp/unsetSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/iujk';
+            });
+        });
+        
+        // change kecamatan 
+        $('#kecamatan').change(function () {
+            $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#kecamatan').val()
+            }, function (obj) {
+                $('#kelurahan').html(obj);
             });
         });
     });
@@ -49,6 +59,10 @@
     function create_iujk() {
         $('#form_iujk').trigger('reset');
         $('#jenis_perizinan').val('IZIN USAHA JASA KONSTRUKSI');
+        $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
+        $('#jabatan').val('Pembina Utama Muda');
+        $('#nip').val('19610704 198603 1 013');
+        $('#jumlah_retribusi').val('10,000');
         $('#form_status').val('add');
         $('#panel_form').show();
         $('#panel_list').hide();
@@ -112,8 +126,13 @@
                         $('#provinsi').val(r.data.provinsi),
                         $('#kota').val(r.data.kota),
                         $('#kecamatan').val(r.data.kecamatan),
-                        $('#kelurahan').val(r.data.kelurahan),
-                        $('#kodepos').val(r.data.kodepos),
+                        $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                            kd_kecamatan: r.data.kecamatan
+                        }, function (obj) {
+                            $('#kelurahan').html(obj);
+                            $('#kelurahan').val(r.data.kelurahan);
+                        });
+                $('#kodepos').val(r.data.kodepos),
                         $('#no_telp').val(r.data.no_telp),
                         $('#fax').val(r.data.fax),
                         $('#penanggung_jawab').val(r.data.penanggung_jawab),
@@ -174,8 +193,8 @@
                                         <th style="width: 150px;">Penanggung Jawab</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
+                                        <!--th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -209,12 +228,12 @@
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
-                                            <td>
+                                            <!--td>
                                                 <button class="btn btn-success" type="button" id="print" onclick="print_iujk(<?php echo $r['id_iujk'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary" type="button" id="print" onclick="print_iujk(<?php echo $r['id_iujk'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
-                                            </td>
+                                            </td-->
                                         </tr>
                                         <?php
                                         $i++;
@@ -347,20 +366,38 @@
                                                 </div>
                                                 <br/>
                                                 <div class="row">
-                                                    <div class="col-xs-2">
+                                                    <div class="col-lg-2">
                                                         <label for="kecamatan">Kecamatan : </label>
                                                     </div>
-                                                    <div class="col-xs-4">
-                                                        <input type="text" class="form-control input-sm" id="kecamatan"/>
+                                                    <div class="col-lg-4">
+                                                        <select class="form-control input-sm" id="kecamatan" >
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
                                                 <div class="row">
-                                                    <div class="col-xs-2">
+                                                    <div class="col-lg-2">
                                                         <label for="kelurahan">Kelurahan : </label>
                                                     </div>
-                                                    <div class="col-xs-4">
-                                                        <input type="text" class="form-control input-sm" id="kelurahan"/>
+                                                    <div class="col-lg-4">
+                                                        <select class="form-control input-sm" id="kelurahan">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>

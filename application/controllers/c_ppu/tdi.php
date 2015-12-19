@@ -12,6 +12,9 @@ class Tdi extends CI_Controller {
             //$d['type_perusahaan'] = $this->m_global->getTypePerusahaan("");
             //$d['jenis_perusahaan'] = $this->m_global->getJenisPerusahaan("");
             //$d['getStatus'] = $this->m_global->getStatusPerusahaan("");
+            $d['listKecamatan'] = $this->m_global->getKecamatan();
+            //$d['listKelurahan'] = $this->m_global->getKelurahan();
+            
             $d['tgl_awal'] = $this->session->userdata('tgl_awal');
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
             
@@ -35,7 +38,7 @@ class Tdi extends CI_Controller {
         }
     }
 
-    function export_doc() {
+    /*function export_doc() {
         $id_tdp = $this->uri->segment(4);
         $type = $this->uri->segment(5);
         $d['results'] = $this->m_tdp->getDataTdp($id_tdp);
@@ -60,7 +63,7 @@ class Tdi extends CI_Controller {
         }
 
         $this->load->view('ppu/tdp/report_tdp', $d);
-    }
+    }*/
     
     function delete(){
         

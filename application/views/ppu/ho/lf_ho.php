@@ -36,6 +36,15 @@
                 window.location.href = '<?php echo base_url() ?>c_ppu/ho';
             });
         });
+        
+        // change kecamatan 
+        $('#kecamatan').change(function () {
+            $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#kecamatan').val()
+            }, function (obj) {
+                $('#kelurahan').html(obj);
+            });
+        });
     });
 
     //kembali ke tampillan tabel 
@@ -50,6 +59,10 @@
         $('#form_ho').trigger('reset');
         $('#form_status').val('add');
         $('#jenis_perizinan').val('IZIN UNDANG-UNDANG GANGGUAN (UUG)');
+        $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
+        $('#jabatan').val('Pembina Utama Muda');
+        $('#nip').val('19610704 198603 1 013');
+        $('#jumlah_retribusi').val('10,000');
         $('#panel_form').show();
         $('#panel_list').hide();
     }
@@ -110,7 +123,12 @@
                 $('#alamat').val(r.data.alamat),
                 $('#kota').val(r.data.kota),
                 $('#kecamatan').val(r.data.kecamatan),
-                $('#kelurahan').val(r.data.kelurahan),
+                $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                            kd_kecamatan: r.data.kecamatan
+                        }, function (obj) {
+                            $('#kelurahan').html(obj);
+                            $('#kelurahan').val(r.data.kelurahan);
+                        });
                 $('#bidang_usaha').val(r.data.bidang_usaha),
                 $('#nama_pemohon').val(r.data.nama_pemohon),
                 $('#no_imb').val(r.data.no_imb),
@@ -173,8 +191,8 @@
                                         <th style="width: 150px;">Pemohon</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
+                                        <!--th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -208,12 +226,12 @@
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
-                                            <td>
+                                            <!--td>
                                                 <button class="btn btn-success" type="button" id="print" onclick="print_ho(<?php echo $r['id_ho'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary" type="button" id="print" onclick="print_ho(<?php echo $r['id_ho'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
-                                            </td>
+                                            </td-->
                                         </tr>
                                         <?php
                                         $i++;
@@ -327,7 +345,16 @@
                                                         <label for="kecamatan">Kecamatan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kecamatan"/>
+                                                        <select class="form-control input-sm" id="kecamatan" >
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -336,7 +363,16 @@
                                                         <label for="kelurahan">Kelurahan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kelurahan"/>
+                                                        <select class="form-control input-sm" id="kelurahan">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>

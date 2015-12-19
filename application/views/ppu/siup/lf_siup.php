@@ -14,29 +14,38 @@
         //init 
         panel_form.hide();
         $('#siup_table').dataTable();
-        
+
         $('#btn_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/setSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/siup';
             });
         });
-        
-        $('#btn_reset_cari').click(function(){
+
+        $('#btn_reset_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/unsetSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/siup';
             });
         });
-        
+
+        // change kecamatan 
+        $('#kecamatan').change(function () {
+            $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#kecamatan').val()
+            }, function (obj) {
+                $('#kelurahan').html(obj);
+            });
+        });
+
     });
 
     //kembali ke tampillan tabel 
@@ -49,6 +58,11 @@
     //memunculkan form menu
     function create_siup() {
         $('#form_siup').trigger('reset');
+        $('#jenis_perizinan').val('SURAT IZIN USAHA PERDAGANGAN');
+        $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
+        $('#jabatan').val('Pembina Utama Muda');
+        $('#nip').val('19610704 198603 1 013');
+        $('#jumlah_retribusi').val('10,000');
         $('#form_status').val('add');
         $('#panel_form').show();
         $('#panel_list').hide();
@@ -117,7 +131,12 @@
                 $('#provinsi').val(r.data.provinsi);
                 $('#kota').val(r.data.kota);
                 $('#kecamatan').val(r.data.kecamatan);
-                $('#kelurahan').val(r.data.kelurahan);
+                $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                    kd_kecamatan: r.data.kecamatan
+                }, function (obj) {
+                    $('#kelurahan').html(obj);
+                    $('#kelurahan').val(r.data.kelurahan);
+                });
                 $('#kodepos').val(r.data.kodepos);
                 $('#no_telp').val(r.data.no_telp);
                 $('#fax').val(r.data.fax);
@@ -163,7 +182,7 @@
                     <div id="panel_list" class="panel panel-default">
                         <div class="panel-heading">
                             <a href="#" class="btn btn-info" id="create_siup" onclick="create_siup()"><i class="fa fa-plus-square fa"></i></a>
-                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
+                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal ?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir ?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
                         </div>
                         <div class="panel-body">
                             <div style="text-align: center"><h3>Surat Izin Usaha Perdagangan</h3></div>
@@ -179,8 +198,8 @@
                                         <th style="width: 150px;">Berlaku S/d</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
+                                        <!--th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -210,12 +229,12 @@
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
-                                            <td>
+                                            <!--td>
                                                 <button class="btn btn-success" type="button" id="print" onclick="print_siup(<?php echo $r['id_siup'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary" type="button" id="print" onclick="print_siup(<?php echo $r['id_siup'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
-                                            </td>
+                                            </td-->
                                         </tr>
                                         <?php
                                         $i++;
@@ -365,7 +384,16 @@
                                                         <label for="kecamatan">Kecamatan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kecamatan"/>
+                                                        <select class="form-control input-sm" id="kecamatan" >
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -374,7 +402,16 @@
                                                         <label for="kelurahan">Kelurahan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kelurahan"/>
+                                                        <select class="form-control input-sm" id="kelurahan">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>

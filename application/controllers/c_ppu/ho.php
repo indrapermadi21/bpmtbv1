@@ -12,6 +12,8 @@ class Ho extends CI_Controller {
             $d['tgl_awal'] = $this->session->userdata('tgl_awal');
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
             $d['listHo'] = $this->m_ho->listHo($d['tgl_awal'], $d['tgl_akhir']);
+            $d['listKecamatan'] = $this->m_global->getKecamatan();
+            //$d['listKelurahan'] = $this->m_global->getKelurahan();
             $d['content'] = 'ppu/ho/lf_ho';
             $this->load->view('template', $d);
         } else {

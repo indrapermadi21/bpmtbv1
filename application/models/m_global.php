@@ -53,6 +53,20 @@ class M_Global extends CI_Model{
             return $query->result();
         }
     }
+    
+    function getKecamatan(){
+        return $this->db->get('ms_kecamatan')->result_array();
+    }
+    
+    function getKelurahan(){
+        return $this->db->get('ms_kelurahan')->result_array();
+    }
+    
+    function getRefKelurahan($kd_kecamatan){
+        
+        $results = $this->db->query("SELECT * FROM ms_kelurahan WHERE kd_kecamatan = '".$kd_kecamatan."'")->result_array();
+        return $results;
+    }
 }
 
 

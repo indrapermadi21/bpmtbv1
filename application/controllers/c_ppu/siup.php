@@ -13,6 +13,8 @@ class Siup extends CI_Controller{
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
             
             $d['listSiup'] = $this->m_siup->getListSiup($d['tgl_awal'],$d['tgl_akhir']);
+            $d['listKecamatan'] = $this->m_global->getKecamatan();
+            //$d['listKelurahan'] = $this->m_global->getKelurahan();
             $d['content'] = 'ppu/siup/lf_siup';
             $this->load->view('template',$d);
         } else {

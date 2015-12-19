@@ -12,6 +12,8 @@ class Iujk extends CI_Controller {
 
             $d['tgl_awal'] = $this->session->userdata('tgl_awal');
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
+            $d['listKecamatan'] = $this->m_global->getKecamatan();
+            //$d['listKelurahan'] = $this->m_global->getKelurahan();
             $d['listIujk'] = $this->m_iujk->listIujk($d['tgl_awal'], $d['tgl_akhir']);
             $d['content'] = 'ppu/iujk/lf_iujk';
             $this->load->view('template', $d);

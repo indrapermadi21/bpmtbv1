@@ -21,7 +21,7 @@
                                     <a href="<?php echo base_url()?>c_ppu/imb" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Mendirikan Bangunan ( IMB )</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Mendirikan Bangunan Menara ( IMBM )</a>
                                     <a href="<?php echo base_url()?>c_ppu/iujk" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Jasa Konstruksi ( IUJK )</a>
-                                    <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Pemasangan Reklame</a>
+                                    <a href="<?php echo base_url()?>c_ppu/ipr" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Pemasangan Reklame</a>
                                     <a href="<?php echo base_url()?>c_ppu/tdi" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Tanda Daftar Industri ( TDI )</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Industri ( IUI ) melalui Persetujuan prinsip</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Industri ( IUI ) tanpa persetujuan prinsip</a>
@@ -34,11 +34,11 @@
                                 <div class="list-group">
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Surat Tanda Pendaftaran Waralaba ( STPW )</a>
                                     <a href="<?php echo base_url()?>c_ppu/tdg" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Tanda Daftar Gudang ( TDG )</a>
-                                    <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Surat Izin Tempat Usaha ( SITU )</a>
+                                    <a href="<?php echo base_url()?>c_ppu/situ" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Surat Izin Tempat Usaha ( SITU )</a>
                                     <a href="<?php echo base_url()?>c_ppu/idamiu" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Depot Air Minum</a>
                                     <a href="<?php echo base_url()?>c_ppu/tdup" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Tanda Daftar Usaha Pariwisata</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Penyelenggaraan Bengkel Umum</a>
-                                    <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Angkutan</a>
+                                    <a href="<?php echo base_url()?>c_ppu/iua" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Angkutan</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Pengelolaan Pasar Tradisional ( IUP2T )</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Pusat Perbelanjaan ( IUPP )</a>
                                     <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Toko Modern</a>

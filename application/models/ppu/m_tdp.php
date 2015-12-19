@@ -88,6 +88,7 @@ class M_tdp extends CI_Model {
         foreach ($results as $r) {
             $r['tgl_pembuatan'] = tgl_convert($r['tgl_pembuatan']);
             $r['tgl_penetapan'] = tgl_convert($r['tgl_penetapan']);
+            $r['tgl_berlaku'] = tgl_convert($r['tgl_berlaku']);
             $data = $r;
         }
 

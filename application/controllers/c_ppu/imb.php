@@ -11,6 +11,8 @@ class Imb extends CI_Controller {
         if ($this->session->userdata('is_log') != "") {
             $d['tgl_awal'] = $this->session->userdata('tgl_awal');
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
+            $d['listKecamatan'] = $this->m_global->getKecamatan();
+            //$d['listKelurahan'] = $this->m_global->getKelurahan();
             $d['listImb'] = $this->m_imb->listImb($d['tgl_awal'], $d['tgl_akhir']);
             $d['content'] = 'ppu/imb/lf_imb';
             $this->load->view('template', $d);

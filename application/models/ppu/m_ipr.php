@@ -1,8 +1,8 @@
 <?php
 
-class M_tdg extends CI_Model {
+class M_ipr extends CI_Model {
 
-    function listTdg($tgl1,$tgl2) {
+    function listIpr($tgl1,$tgl2) {
         $tgl_awal = convert_tgl($tgl1);
         $tgl_akhir = convert_tgl($tgl2);
         if($tgl_awal<>'' && $tgl_akhir<>''){
@@ -11,17 +11,20 @@ class M_tdg extends CI_Model {
             $query_tgl = '';
         }
         
-        $query = $this->db->query('SELECT * FROM ppu_tdg WHERE id_tdg<>0 ' . $query_tgl . '  ORDER BY tgl_pembuatan DESC');
+        $query = $this->db->query('SELECT * FROM ppu_ipr WHERE id_ipr<>0 ' . $query_tgl . '  ORDER BY tgl_pembuatan DESC');
         return $query->result_array();
     }
 
-    function getTdg() {
-        $id_tdg = $this->input->post('id_tdg');
-        $results = $this->db->query("SELECT * FROM ppu_tdg WHERE id_tdg=" . $id_tdg)->result_array();
+    function getIpr() {
+        $id_ipr = $this->input->post('id_ipr');
+        $results = $this->db->query("SELECT * FROM ppu_ipr WHERE id_ipr=" . $id_ipr)->result_array();
         $data = array();
         foreach($results as $r){
             $r['tgl_pembuatan'] = tgl_convert($r['tgl_pembuatan']);
             $r['tgl_penetapan'] = tgl_convert($r['tgl_penetapan']);
+            $r['tgl_berlaku'] = tgl_convert($r['tgl_berlaku']);
+            $r['tgl_tetap_pajak'] = tgl_convert($r['tgl_tetap_pajak']);
+            $r['tgl_pajak_daerah'] = tgl_convert($r['tgl_pajak_daerah']);
             $data = $r;
         }
         
@@ -34,24 +37,21 @@ class M_tdg extends CI_Model {
             'tgl_pembuatan' => convert_tgl($this->input->post('tgl_pembuatan')),
             'no_pelayanan' => $this->input->post('no_pelayanan'),
             'keterangan' => $this->input->post('keterangan'),
+            'kualifikasi' => $this->input->post('kualifikasi'),
             'nama_perusahaan' => $this->input->post('nama_perusahaan'),
-            'alamat_perusahaan' => $this->input->post('alamat_perusahaan'),
+            'alamat' => $this->input->post('alamat'),
             'kota' => $this->input->post('kota'),
             'kecamatan' => $this->input->post('kecamatan'),
             'kelurahan' => $this->input->post('kelurahan'),
-            'nama_pemilik' => $this->input->post('nama_pemilik'),
-            'alamat_pemilik' => $this->input->post('alamat_pemilik'),
-            'no_siup' => $this->input->post('no_siup'),
-            'tgl_siup' => convert_tgl($this->input->post('tgl_siup')),
-            'no_tdp' => $this->input->post('no_tdp'),
-            'tgl_tdp' => convert_tgl($this->input->post('tgl_tdp')),
-            'tmpt_keluar' => $this->input->post('tmpt_keluar'),
-            'siui' => $this->input->post('siui'),
-            'lokasi_prov' => $this->input->post('lokasi_prov'),
-            'lokasi_kota' => $this->input->post('lokasi_kota'),
-            'lokasi_kec' => $this->input->post('lokasi_kec'),
-            'lokasi_kel' => $this->input->post('lokasi_kel'),
-            'luas_gudang' => $this->input->post('luas_gudang'),
+            'penanggung_jawab' => $this->input->post('penanggung_jawab'),
+            'npwp' => $this->input->post('npwp'),
+            'tgl_tetap_pajak' => convert_tgl($this->input->post('tgl_tetap_pajak')),
+            'tgl_pajak_daerah' => convert_tgl($this->input->post('tgl_pajak_daerah')),
+            'jenis_reklame' => $this->input->post('jenis_reklame'),
+            'judul_reklame' => $this->input->post('judul_reklame'),
+            'ukuran' => $this->input->post('ukuran'),
+            'banyak' => $this->input->post('banyak'),
+            'lokasi' => $this->input->post('lokasi'),
             'tgl_penetapan' => convert_tgl($this->input->post('tgl_penetapan')),
             'tgl_berlaku' => convert_tgl($this->input->post('tgl_berlaku')),
             'no_registrasi' => $this->input->post('no_registrasi'),
@@ -62,15 +62,15 @@ class M_tdg extends CI_Model {
         );
         
         $form_status = $this->input->post('form_status');
-        $id_tdg = $this->input->post('id_tdg');
+        $id_ipr = $this->input->post('id_ipr');
 
         $this->db->trans_begin();
 
             if ($form_status == 'edit') {
-                $this->db->where('id_tdg', $id_tdg);
-                $this->db->update('ppu_tdg', $data);
+                $this->db->where('id_ipr', $id_ipr);
+                $this->db->update('ppu_ipr', $data);
             } else {
-                $this->db->insert('ppu_tdg', $data);
+                $this->db->insert('ppu_ipr', $data);
             }
 
         if ($this->db->trans_status() === FALSE) {
@@ -83,10 +83,10 @@ class M_tdg extends CI_Model {
     }
 
     function is_deleted() {
-        $id_tdg = $this->input->post('id_tdg');
+        $id_ipr = $this->input->post('id_ipr');
         $this->db->trans_begin();
 
-        $this->db->query('update ppu_tdg set status="1" where id_tdg=' . $id_tdg);
+        $this->db->query('update ppu_ipr set status="1" where id_ipr=' . $id_ipr);
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -96,14 +96,5 @@ class M_tdg extends CI_Model {
         }
     }
 
-    /*function getTdp($id_tdp) {
-        $query = $this->db->query('select * from ppu_tdp where id_tdp=' . $id_tdp);
-        return $query->result();
-    }
-
-    function getDataTdp($id_tdp) {
-        $query = $this->db->query('select * from ppu_tdp where id_tdp=' . $id_tdp);
-        return $query->row();
-    }*/
 
 }

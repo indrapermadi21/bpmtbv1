@@ -43,6 +43,18 @@
             <span>Penanaman Modal</span>
         </a>
     </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>Laporan Pelayanan Usaha</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-angle-double-right"></i>Rekapitulasi Pelayanan Pendaftaran</a></li>
+            <li><a href="<?php echo base_url() ?>report_usaha/jenisIzin"><i class="fa fa-angle-double-right"></i>Pelayanan Per Jenis Izin Usaha</a></li>
+            <li><a href="#"><i class="fa fa-angle-double-right"></i>Statistik Pelayanan Perizinan</a></li>
+        </ul>
+    </li>
 
 </ul>
 </section>

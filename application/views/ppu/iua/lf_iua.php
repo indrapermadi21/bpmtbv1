@@ -13,30 +13,30 @@
 
         //init 
         panel_form.hide();
-        $('#tdup_table').dataTable();
-        
+        $('#iua_table').dataTable();
+
         $('#btn_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/setSession', data, function () {
-                window.location.href = '<?php echo base_url() ?>c_ppu/tdup';
+                window.location.href = '<?php echo base_url() ?>c_ppu/iua';
             });
         });
-        
-        $('#btn_reset_cari').click(function(){
+
+        $('#btn_reset_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/unsetSession', data, function () {
-                window.location.href = '<?php echo base_url() ?>c_ppu/tdup';
+                window.location.href = '<?php echo base_url() ?>c_ppu/iua';
             });
         });
-        
+
         // change kecamatan 
         $('#kecamatan').change(function () {
             $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
@@ -45,8 +45,20 @@
                 $('#kelurahan').html(obj);
             });
         });
-        
-        
+
+        // change lokasi kecamatan 
+        $('#lokasi_kec').change(function () {
+            $.post("<?php echo base_url() ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#lokasi_kec').val()
+            }, function (obj) {
+                $('#lokasi_kel').html(obj);
+            });
+
+        });
+
+
+
+
     });
 
     //kembali ke tampillan tabel 
@@ -57,37 +69,40 @@
 
 
     //memunculkan form menu
-    function create_tdup() {
-        $('#form_tdup').trigger('reset');
-        $('#form_status').val('add');
-        $('#jenis_perizinan').val('TANDA DAFTAR USAHA PARIWISATA');
+    function create_iua() {
+        $('#form_iua').trigger('reset');
+        $('#jenis_perizinan').val('IZIN PEMASANGAN REKLAME');
         $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
         $('#jabatan').val('Pembina Utama Muda');
         $('#nip').val('19610704 198603 1 013');
         $('#jumlah_retribusi').val('10,000');
+        $('#form_status').val('add');
         $('#panel_form').show();
         $('#panel_list').hide();
     }
 
     //fungsi untuk proses save data
-    function save_tdup() {
+    function save_iua() {
         var data = {
             jenis_perizinan: $('#jenis_perizinan').val(),
             tgl_pembuatan: $('#tgl_pembuatan').val(),
             no_pelayanan: $('#no_pelayanan').val(),
             keterangan: $('#keterangan').val(),
+            kualifikasi: $('#kualifikasi').val(),
             nama_perusahaan: $('#nama_perusahaan').val(),
             alamat: $('#alamat').val(),
             kota: $('#kota').val(),
             kecamatan: $('#kecamatan').val(),
             kelurahan: $('#kelurahan').val(),
-            no_telp: $('#no_telp').val(),
-            fax: $('#fax').val(),
-            nama_pemilik: $('#nama_pemilik').val(),
             penanggung_jawab: $('#penanggung_jawab').val(),
             npwp: $('#npwp').val(),
-            bidang_usaha: $('#bidang_usaha').val(),
-            klasifikasi: $('#klasifikasi').val(),
+            tgl_tetap_pajak: $('#tgl_tetap_pajak').val(),
+            tgl_pajak_daerah: $('#tgl_pajak_daerah').val(),
+            jenis_reklame: $('#jenis_reklame').val(),
+            judul_reklame: $('#judul_reklame').val(),
+            ukuran: $('#ukuran').val(),
+            banyak: $('#banyak').val(),
+            lokasi: $('#lokasi').val(),
             tgl_penetapan: $('#tgl_penetapan').val(),
             tgl_berlaku: $('#tgl_berlaku').val(),
             no_registrasi: $('#no_registrasi').val(),
@@ -95,52 +110,47 @@
             jabatan: $('#jabatan').val(),
             nip: $('#nip').val(),
             jumlah_retribusi: $('#jumlah_retribusi').val(),
-            id_tdup: $('#id_tdup').val(),
+            id_iua: $('#id_iua').val(),
             form_status: $('#form_status').val()
         };
 
-        $.post('<?php echo base_url() ?>c_ppu/tdup/save', data, function (r) {
+        $.post('<?php echo base_url() ?>c_ppu/iua/save', data, function (r) {
             if (r.success) {
-                window.location.href = '<?php echo base_url() ?>c_ppu/tdup';
+                window.location.href = '<?php echo base_url() ?>c_ppu/iua';
             }
         }, 'json');
     }
 
-    function edit_tdup(el) {
+    function edit_iua(el) {
 
-        $.post('<?php echo base_url() ?>c_ppu/tdup/getTdup', {
-            id_tdup: el
+        $.post('<?php echo base_url() ?>c_ppu/iua/getIua', {
+            id_iua: el
         }, function (r) {
-            if (r.success) {
+            if (r) {
                 $('#jenis_perizinan').val(r.data.jenis_perizinan);
-                $('#tgl_pembuatan').val(r.data.tgl_pembuatan),
-                $('#no_pelayanan').val(r.data.no_pelayanan),
-                $('#keterangan').val(r.data.keterangan),
-                $('#nama_perusahaan').val(r.data.nama_perusahaan),
-                $('#alamat').val(r.data.alamat),
-                $('#kota').val(r.data.kota),
-                $('#kecamatan').val(r.data.kecamatan),
+                $('#tgl_pembuatan').val(r.data.tgl_pembuatan);
+                $('#no_pelayanan').val(r.data.no_pelayanan);
+                $('#keterangan').val(r.data.keterangan);
+                $('#nama_perusahaan').val(r.data.nama_perusahaan);
+                $('#alamat').val(r.data.alamat);
+                $('#kota').val(r.data.kota);
+                $('#kecamatan').val(r.data.kecamatan);
                 $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
                     kd_kecamatan: r.data.kecamatan
                 }, function (obj) {
                     $('#kelurahan').html(obj);
                     $('#kelurahan').val(r.data.kelurahan);
                 });
-                $('#no_telp').val(r.data.no_telp),
-                $('#fax').val(r.data.fax),
-                $('#nama_pemilik').val(r.data.nama_pemilik),
-                $('#penanggung_jawab').val(r.data.penanggung_jawab),
-                $('#npwp').val(r.data.npwp),
-                $('#bidang_usaha').val(r.data.bidang_usaha),
-                $('#klasifikasi').val(r.data.klasifikasi),
-                $('#tgl_penetapan').val(r.data.tgl_penetapan),
-                $('#tgl_berlaku').val(r.data.tgl_berlaku),
-                $('#no_registrasi').val(r.data.no_registrasi),
-                $('#nama_pejabat').val(r.data.nama_pejabat),
-                $('#jabatan').val(r.data.jabatan),
-                $('#nip').val(r.data.nip),
-                $('#jumlah_retribusi').val(r.data.jumlah_retribusi),
-                $('#id_tdup').val(r.data.id_tdup);
+                $('#bidang_usaha').val(r.data.bidang_usaha);
+                $('#penanggung_jawab').val(r.data.penanggung_jawab);
+                $('#tgl_penetapan').val(r.data.tgl_penetapan);
+                $('#tgl_berlaku').val(r.data.tgl_berlaku);
+                $('#no_registrasi').val(r.data.no_registrasi);
+                $('#nama_pejabat').val(r.data.nama_pejabat);
+                $('#jabatan').val(r.data.jabatan);
+                $('#nip').val(r.data.nip);
+                $('#jumlah_retribusi').val(r.data.jumlah_retribusi);
+                $('#id_iua').val(r.data.id_iua);
                 $('#form_status').val('edit');
                 $('#panel_list').hide();
                 $('#panel_form').show();
@@ -148,12 +158,12 @@
         }, 'json');
     }
 
-    function remove_tdup(el) {
-        $.post('<?php echo base_url() ?>c_ppu/tdup/delete', {
-            id_tdup: el
+    function remove_iua(el) {
+        $.post('<?php echo base_url() ?>c_ppu/iua/delete', {
+            id_iua: el
         }, function () {
-            window.location.href = '<?php echo base_url() ?>c_ppu/tdup';
-        },'json');
+            window.location.href = '<?php echo base_url() ?>c_ppu/iua';
+        }, 'json');
     }
 </script>
 
@@ -168,13 +178,13 @@
                 <div class="box-body table-responsive">
                     <div id="panel_list" class="panel panel-default">
                         <div class="panel-heading">
-                            <a href="#" id="create_tdup" class="btn btn-info" onclick="create_tdup()"><i class="fa fa-plus-square fa"></i></a>
-                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
+                            <a href="#" id="create_iua" class="btn btn-info" onclick="create_iua()"><i class="fa fa-plus-square fa"></i></a>
+                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal ?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir ?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
                         </div>
                         <div class="panel-body">
-                            <div style="text-align: center"><h3>Tanda Daftar Usaha Pariwisata</h3></div>
+                            <div style="text-align: center"><h3>Izin Usaha Angkutan</h3></div>
                             <div class="show_message"></div>
-                            <table id="tdup_table" class="table table-bordered table-striped">
+                            <table id="iua_table" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width: 20px">No.</th>
@@ -182,7 +192,7 @@
                                         <th style="width: 150px;">No Registrasi</th>
                                         <th style="width: 150px;">Tgl Buat</th>
                                         <th style="width: 150px;">Nama Perusahaan</th>
-                                        <th style="width: 150px;">Pejabat</th>
+                                        <th style="width: 150px;">Penanggung Jawab</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
                                         <!--th style="width: 5px;"></th>
@@ -192,7 +202,7 @@
                                 <tbody>
                                     <?php
                                     $i = 1;
-                                    foreach ($listTdup as $r) {
+                                    foreach ($listIua as $r) {
                                         if ($r['status'] == 1) {
                                             $color = 'red';
                                         } else {
@@ -200,31 +210,27 @@
                                         }
                                         ?>
                                         <tr>
-                                            <td><font color="<?php echo $color?>"><?php echo $i ?></font></td>
-                                            <td><font color="<?php echo $color?>"><?php echo $r['no_pelayanan'] ?></font></td>
-                                            <td><font color="<?php echo $color?>"><?php echo $r['no_registrasi'] ?></font></td>
-                                            <td><font color="<?php echo $color?>"><?php echo $r['tgl_pembuatan'] ?></font></td>
-                                            <td><font color="<?php echo $color?>"><?php echo $r['nama_perusahaan'] ?></font></td>
-                                            <td><font color="<?php echo $color?>"><?php echo $r['nama_pejabat'] ?></font></td>
+                                            <td><?php echo $i ?></td>
+                                            <td><?php echo $r['no_pelayanan'] ?></td>
+                                            <td><?php echo $r['no_registrasi'] ?></td>
+                                            <td><?php echo $r['tgl_pembuatan'] ?></td>
+                                            <td><?php echo $r['nama_perusahaan'] ?></td>
+                                            <td><?php echo $r['penanggung_jawab'] ?></td>
                                             <td>
-                                                <?php if ($r['status'] != 1) { ?>
-                                                <button class="btn btn-info" type="button" id="edit_tdup" onclick="edit_tdup(<?php echo $r['id_tdup'] ?>)"><i class="fa fa-pencil"></i></button>
-                                                <?php } else { ?>
-                                                    <div style="text-align: center">-</div>
-                                                <?php } ?>
+                                                <button class="btn btn-info" type="button" id="edit_iua" onclick="edit_iua(<?php echo $r['id_iua'] ?>)"><i class="fa fa-pencil"></i></button>
                                             </td>
                                             <td>
                                                 <?php if ($r['status'] != 1) { ?>
-                                                    <button class="btn btn-warning" type="button" id="remove_tdup" onclick="remove_tdup(<?php echo $r['id_tdup'] ?>)"><i class="fa fa-trash"></i></button>
+                                                    <button class="btn btn-warning" type="button" id="remove_iua" onclick="remove_iua(<?php echo $r['id_iua'] ?>)"><i class="fa fa-trash"></i></button>
                                                 <?php } else { ?>
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
                                             <!--td>
-                                                <button class="btn btn-success" type="button" id="print" onclick="print_tdup(<?php echo $r['id_tdup'] ?>, '')"><i class="fa fa-print"></i></button>
+                                                <button class="btn btn-success" type="button" id="print" onclick="print_iua(<?php echo $r['id_iua'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary" type="button" id="print" onclick="print_tdup(<?php echo $r['id_tdup'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
+                                                <button class="btn btn-primary" type="button" id="print" onclick="print_iua(<?php echo $r['id_iua'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
                                             </td-->
                                         </tr>
                                         <?php
@@ -241,12 +247,11 @@
                     <div id="panel_form" class="panel panel-default">
                         <div class="panel-heading">
                             <button class="btn btn-primary" id="back_grid" onclick="back_grid()"><i class="fa fa-table"></i></button>
-                            <button class="btn btn-primary" id="save_tdup" onclick="save_tdup()"><i class="fa fa-save"></i></button>
+                            <button class="btn btn-primary" id="save_iua" onclick="save_iua()"><i class="fa fa-save"></i></button>
                         </div>
                         <div class="panel-body">
                             <div class="show_error"></div>
-                            <form id="form_tdup">
-
+                            <form id="form_iua">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         Input Izin
@@ -267,7 +272,7 @@
                                             </div>
                                             <div class="col-lg-2">
                                                 <input type="hidden" id="form_status" >
-                                                <input type="hidden" id="id_tdup" >
+                                                <input type="hidden" id="id_iua" >
                                                 <input type="text" class="form-control input-sm datepicker" id="tgl_pembuatan"/>
                                             </div>
                                         </div>
@@ -363,64 +368,23 @@
                                                 <br/>
                                                 <div class="row">
                                                     <div class="col-lg-2">
-                                                        <label for="no_telp">No. Telp : </label>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <input type="text" class="form-control input-sm" id="no_telp"/>
-                                                    </div>
-                                                    <div class="col-lg-1">
-                                                        <label for="fax">Fax : </label>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <input type="text" class="form-control input-sm" id="fax"/>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                            </div>
-                                            <div id="info_lain" class="tab-pane fade">
-                                                <br><br>
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <label for="nama_pemilik">Pemilik : </label>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="nama_pemilik"/>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <label for="penanggung_jawab">Penanggung Jawab : </label>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="penanggung_jawab"/>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <label for="npwp">NPWP : </label>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="npwp"/>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <label for="bidang_usaha">Bidang Usaha Kepariwisataan : </label>
+                                                        <label for="bidang_usaha">Bidang Usaha : </label>
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <textarea class="form-control input-sm" id="bidang_usaha"></textarea>
                                                     </div>
                                                 </div>
                                                 <br/>
+
+                                            </div>
+                                            <div id="info_lain" class="tab-pane fade">
+                                                <br><br>
                                                 <div class="row">
                                                     <div class="col-lg-2">
-                                                        <label for="klasifikasi">Klasifikasi : </label>
+                                                        <label for="penanggung_jawab">Penanggung Jawab : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <textarea class="form-control input-sm" id="klasifikasi"></textarea>
+                                                        <input type="text" class="form-control input-sm" id="penanggung_jawab"/>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -439,15 +403,6 @@
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <input type="text" class="form-control input-sm datepicker" id="tgl_penetapan"/>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <label for="tgl_berlaku">Berlaku: </label>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <input type="text" class="form-control input-sm datepicker" id="tgl_berlaku"/>
                                                     </div>
                                                 </div>
                                                 <br/>

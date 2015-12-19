@@ -1,10 +1,10 @@
 <?php
 
-class Tdg extends CI_Controller {
+class Iua extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model('ppu/m_tdg');
+        $this->load->model('ppu/m_iua');
     }
 
     function index() {
@@ -12,24 +12,24 @@ class Tdg extends CI_Controller {
 
             $d['tgl_awal'] = $this->session->userdata('tgl_awal');
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
-            $d['listTdg'] = $this->m_tdg->listTdg($d['tgl_awal'], $d['tgl_akhir']);
+            $d['listIua'] = $this->m_iua->listIua($d['tgl_awal'], $d['tgl_akhir']);
 
             $d['listKecamatan'] = $this->m_global->getKecamatan();
             //$d['listKelurahan'] = $this->m_global->getKelurahan();
-            $d['content'] = 'ppu/tdg/lf_tdg';
+            $d['content'] = 'ppu/iua/lf_iua';
             $this->load->view('template', $d);
         } else {
             header('location:' . base_url() . '');
         }
     }
 
-    function getTdg() {
-        $result = $this->m_tdg->getTdg();
+    function getIua() {
+        $result = $this->m_iua->getIua();
         echo json_encode(array('data' => $result, 'success' => true));
     }
 
     function save() {
-        if ($this->m_tdg->saved()) {
+        if ($this->m_iua->saved()) {
             echo json_encode(['success' => true]);
         }
     }
@@ -62,7 +62,7 @@ class Tdg extends CI_Controller {
       } */
 
     function delete() {
-        if ($this->m_tdg->is_deleted()) {
+        if ($this->m_iua->is_deleted()) {
             echo json_encode(['success' => TRUE]);
         }
     }

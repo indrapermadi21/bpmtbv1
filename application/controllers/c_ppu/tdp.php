@@ -17,6 +17,9 @@ class Tdp extends CI_Controller {
             $d['type_perusahaan'] = $this->m_global->getTypePerusahaan("");
             $d['jenis_perusahaan'] = $this->m_global->getJenisPerusahaan("");
             $d['getStatus'] = $this->m_global->getStatusPerusahaan("");
+            
+            $d['listKecamatan'] = $this->m_global->getKecamatan();
+            //$d['listKelurahan'] = $this->m_global->getKelurahan();
             $d['listTdp'] = $this->m_tdp->listTdp($d['tgl_awal'], $d['tgl_akhir']);
             $d['content'] = 'ppu/tdp/lf_tdp';
             $this->load->view('template', $d);
@@ -28,7 +31,7 @@ class Tdp extends CI_Controller {
     function getTdp() {
 
         $results = $this->m_tdp->getTdp();
-        echo json_encode(['data' => $results]);
+        echo json_encode(['success'=>true,'data' => $results]);
     }
 
     function save() {

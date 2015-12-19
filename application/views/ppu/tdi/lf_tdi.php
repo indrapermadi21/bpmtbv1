@@ -14,24 +14,43 @@
         //init 
         panel_form.hide();
         $('#tdi_table').dataTable();
-        
+
+        // change kecamatan 
+        $('#kecamatan').change(function () {
+            $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#kecamatan').val()
+            }, function (obj) {
+                $('#kelurahan').html(obj);
+            });
+        });
+
+        // change lokasi kecamatan 
+        $('#lokasi_kec').change(function () {
+            $.post("<?php echo base_url() ?>globals/getRefKelurahan/", {
+                kd_kecamatan: $('#lokasi_kec').val()
+            }, function (obj) {
+                $('#lokasi_kel').html(obj);
+            });
+
+        });
+
         $('#btn_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/setSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/tdi';
             });
         });
-        
-        $('#btn_reset_cari').click(function(){
+
+        $('#btn_reset_cari').click(function () {
             var data = {
-                tgl_awal : $('#tgl_awal').val(),
-                tgl_akhir : $('#tgl_akhir').val()
+                tgl_awal: $('#tgl_awal').val(),
+                tgl_akhir: $('#tgl_akhir').val()
             };
-            
+
             $.post('<?php echo base_url() ?>c_ppu/tdp/unsetSession', data, function () {
                 window.location.href = '<?php echo base_url() ?>c_ppu/tdi';
             });
@@ -49,6 +68,20 @@
         $('#form_menu').trigger('reset');
         $('#form_status').val('add');
         $('#jenis_perizinan').val('TANDA DAFTAR INDUSTRI');
+        $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
+        $('#jabatan').val('Pembina Utama Muda');
+        $('#nip').val('19610704 198603 1 013');
+        $('#jumlah_retribusi').val('10,000');
+        $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+            kd_kecamatan: ''
+        }, function (obj) {
+            $('#kelurahan').html(obj);
+        });
+        $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+            kd_kecamatan: ''
+        }, function (obj) {
+            $('#lokasi_kel').html(obj);
+        });
         $('#panel_form').show();
         $('#panel_list').hide();
     }
@@ -146,7 +179,12 @@
                 $('#alamat_notelp').val(r.data.alamat_notelp);
                 $('#kota').val(r.data.kota);
                 $('#kecamatan').val(r.data.kecamatan);
-                $('#kelurahan').val(r.data.kelurahan);
+                $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                    kd_kecamatan: r.data.kecamatan
+                }, function (obj) {
+                    $('#kelurahan').html(obj);
+                    $('#kelurahan').val(r.data.kelurahan);
+                });
                 $('#kodepos').val(r.data.kodepos);
                 $('#npwp').val(r.data.npwp);
                 $('#nipik').val(r.data.nipik);
@@ -159,7 +197,12 @@
                 $('#lokasi_prov').val(r.data.lokasi_prov);
                 $('#lokasi_kota').val(r.data.lokasi_kota);
                 $('#lokasi_kec').val(r.data.lokasi_kec);
-                $('#lokasi_kel').val(r.data.lokasi_kel);
+                $.post("<?php echo base_url(); ?>globals/getRefKelurahan/", {
+                    kd_kecamatan: r.data.lokasi_kec
+                }, function (obj) {
+                    $('#lokasi_kel').html(obj);
+                    $('#lokasi_kel').val(r.data.lokasi_kel);
+                });
                 $('#p_utama').val(r.data.p_utama);
                 $('#p_pembantu').val(r.data.p_pembantu);
                 $('#tenaga_penggerak').val(r.data.tenaga_penggerak);
@@ -205,7 +248,7 @@
                     <div id="panel_list" class="panel panel-default">
                         <div class="panel-heading">
                             <a href="#" class="btn btn-info" id="create_tdi" onclick="create_tdi()"><i class="fa fa-plus-square fa"></i></a>
-                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
+                            <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal ?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir ?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
                         </div>
                         <div class="panel-body">
                             <div style="text-align: center"><h3>Tanda Daftar Industri</h3></div>
@@ -221,8 +264,8 @@
                                         <th style="width: 150px;">Nama Perusahaan</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
-                                        <th style="width: 5px;"></th>
+                                        <!--th style="width: 5px;"></th>
+                                        <th style="width: 5px;"></th-->
                                     </tr>
                                 </thead>
 
@@ -252,12 +295,12 @@
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
-                                            <td>
+                                            <!--td>
                                                 <button class="btn btn-success" type="button" id="print" onclick="print_tdi(<?php echo $r['id_tdi'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary" type="button" id="print" onclick="print_tdi(<?php echo $r['id_tdi'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
-                                            </td>
+                                            </td-->
                                         </tr>
                                         <?php
                                         $i++;
@@ -364,7 +407,16 @@
                                                         <label for="kecamatan">Kecamatan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kecamatan"/>
+                                                        <select class="form-control input-sm" id="kecamatan" >
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -373,7 +425,16 @@
                                                         <label for="kelurahan">Kelurahan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="kelurahan"/>
+                                                        <select class="form-control input-sm" id="kelurahan">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -491,7 +552,16 @@
                                                         <label for="lokasi_kec">Kecamatan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="lokasi_kec"/>
+                                                        <select class="form-control input-sm" id="lokasi_kec">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKecamatan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kecamatan'] ?>"><?php echo $r['kecamatan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -500,7 +570,16 @@
                                                         <label for="lokasi_kel">Kelurahan : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="lokasi_kel"/>
+                                                        <select class="form-control input-sm" id="lokasi_kel">
+                                                            <option value="-">-</option>
+                                                            <?php
+                                                            foreach ($listKelurahan as $r) {
+                                                                ?>
+                                                                <option value="<?php echo $r['kd_kelurahan'] ?>"><?php echo $r['kelurahan'] ?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <br/>
@@ -577,7 +656,7 @@
                                                 </div>
                                                 <br/>
                                                 <div class="row">
-                                                    <div class="col--2">
+                                                    <div class="col-lg-2">
                                                         <label for="tgl_penetapan">Tanggal : </label>
                                                     </div>
                                                     <div class="col-lg-2">
