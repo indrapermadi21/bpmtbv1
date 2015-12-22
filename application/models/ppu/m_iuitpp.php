@@ -1,8 +1,8 @@
 <?php
 
-class M_iua extends CI_Model {
+class M_iuitpp extends CI_Model {
 
-    function listIua($tgl1,$tgl2) {
+    function listIuitpp($tgl1,$tgl2) {
         $tgl_awal = convert_tgl($tgl1);
         $tgl_akhir = convert_tgl($tgl2);
         if($tgl_awal<>'' && $tgl_akhir<>''){
@@ -11,13 +11,13 @@ class M_iua extends CI_Model {
             $query_tgl = '';
         }
         
-        $query = $this->db->query('SELECT * FROM ppu_iua WHERE id_iua<>0 ' . $query_tgl . '  ORDER BY tgl_pembuatan DESC');
+        $query = $this->db->query('SELECT * FROM ppu_iuitpp WHERE id_iuitpp<>0 ' . $query_tgl . '  ORDER BY tgl_pembuatan DESC');
         return $query->result_array();
     }
 
-    function getIua() {
-        $id_iua = $this->input->post('id_iua');
-        $results = $this->db->query("SELECT * FROM ppu_iua WHERE id_iua=" . $id_iua)->result_array();
+    function getIuitpp() {
+        $id_iuitpp = $this->input->post('id_iuitpp');
+        $results = $this->db->query("SELECT * FROM ppu_iuitpp WHERE id_iuitpp=" . $id_iuitpp)->result_array();
         $data = array();
         foreach($results as $r){
             $r['tgl_pembuatan'] = tgl_convert($r['tgl_pembuatan']);
@@ -39,8 +39,10 @@ class M_iua extends CI_Model {
             'kota' => $this->input->post('kota'),
             'kecamatan' => $this->input->post('kecamatan'),
             'kelurahan' => $this->input->post('kelurahan'),
-            'bidang_usaha' => $this->input->post('bidang_usaha'),
-            'penanggung_jawab' => $this->input->post('penanggung_jawab'),
+            'nama_pemilik' => $this->input->post('nama_pemilik'),
+            'alamat_pemilik' => $this->input->post('alamat_pemilik'),
+            'npwp' => $this->input->post('npwp'),
+            'jenis_industri' => $this->input->post('jenis_industri'),
             'tgl_penetapan' => convert_tgl($this->input->post('tgl_penetapan')),
             'no_registrasi' => $this->input->post('no_registrasi'),
             'nama_pejabat' => $this->input->post('nama_pejabat'),
@@ -50,15 +52,15 @@ class M_iua extends CI_Model {
         );
         
         $form_status = $this->input->post('form_status');
-        $id_iua = $this->input->post('id_iua');
+        $id_iuitpp = $this->input->post('id_iuitpp');
 
         $this->db->trans_begin();
 
             if ($form_status == 'edit') {
-                $this->db->where('id_iua', $id_iua);
-                $this->db->update('ppu_iua', $data);
+                $this->db->where('id_iuitpp', $id_iuitpp);
+                $this->db->update('ppu_iuitpp', $data);
             } else {
-                $this->db->insert('ppu_iua', $data);
+                $this->db->insert('ppu_iuitpp', $data);
             }
 
         if ($this->db->trans_status() === FALSE) {
@@ -71,10 +73,10 @@ class M_iua extends CI_Model {
     }
 
     function is_deleted() {
-        $id_iua = $this->input->post('id_iua');
+        $id_iuitpp = $this->input->post('id_iuitpp');
         $this->db->trans_begin();
 
-        $this->db->query('update ppu_iua set status="1" where id_iua=' . $id_iua);
+        $this->db->query('update ppu_iuitpp set status="1" where id_iuitpp=' . $id_iuitpp);
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();

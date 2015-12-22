@@ -13,7 +13,7 @@
 
         //init 
         panel_form.hide();
-        $('#iua_table').dataTable();
+        $('#iuitpp_table').dataTable();
 
         $('#btn_cari').click(function () {
             var data = {
@@ -22,7 +22,7 @@
             };
 
             $.post('<?php echo base_url() ?>c_ppu/tdp/setSession', data, function () {
-                window.location.href = '<?php echo base_url() ?>c_ppu/iua';
+                window.location.href = '<?php echo base_url() ?>c_ppu/iuitpp';
             });
         });
 
@@ -33,7 +33,7 @@
             };
 
             $.post('<?php echo base_url() ?>c_ppu/tdp/unsetSession', data, function () {
-                window.location.href = '<?php echo base_url() ?>c_ppu/iua';
+                window.location.href = '<?php echo base_url() ?>c_ppu/iuitpp';
             });
         });
 
@@ -69,9 +69,9 @@
 
 
     //memunculkan form menu
-    function create_iua() {
-        $('#form_iua').trigger('reset');
-        $('#jenis_perizinan').val('IZIN USAHA ANGKUTAN');
+    function create_iuitpp() {
+        $('#form_iuitpp').trigger('reset');
+        $('#jenis_perizinan').val('IZIN USAHA INDUSTRI TANPA MELALUI PERSETUJUAN PRINSIP');
         $('#nama_pejabat').val('MAMAT HAMBALI, SH, M.Si');
         $('#jabatan').val('Pembina Utama Muda');
         $('#nip').val('19610704 198603 1 013');
@@ -82,7 +82,7 @@
     }
 
     //fungsi untuk proses save data
-    function save_iua() {
+    function save_iuitpp() {
         var data = {
             jenis_perizinan: $('#jenis_perizinan').val(),
             tgl_pembuatan: $('#tgl_pembuatan').val(),
@@ -93,29 +93,31 @@
             kota: $('#kota').val(),
             kecamatan: $('#kecamatan').val(),
             kelurahan: $('#kelurahan').val(),
-            bidang_usaha: $('#bidang_usaha').val(),
-            penanggung_jawab: $('#penanggung_jawab').val(),
+            nama_pemilik: $('#nama_pemilik').val(),
+            alamat_pemilik: $('#alamat_pemilik').val(),
+            npwp: $('#npwp').val(),
+            jenis_industri: $('#jenis_industri').val(),
             tgl_penetapan: $('#tgl_penetapan').val(),
             no_registrasi: $('#no_registrasi').val(),
             nama_pejabat: $('#nama_pejabat').val(),
             jabatan: $('#jabatan').val(),
             nip: $('#nip').val(),
             jumlah_retribusi: $('#jumlah_retribusi').val(),
-            id_iua: $('#id_iua').val(),
+            id_iuitpp: $('#id_iuitpp').val(),
             form_status: $('#form_status').val()
         };
 
-        $.post('<?php echo base_url() ?>c_ppu/iua/save', data, function (r) {
+        $.post('<?php echo base_url() ?>c_ppu/iuitpp/save', data, function (r) {
             if (r.success) {
-                window.location.href = '<?php echo base_url() ?>c_ppu/iua';
+                window.location.href = '<?php echo base_url() ?>c_ppu/iuitpp';
             }
         }, 'json');
     }
 
-    function edit_iua(el) {
+    function edit_iuitpp(el) {
 
-        $.post('<?php echo base_url() ?>c_ppu/iua/getIua', {
-            id_iua: el
+        $.post('<?php echo base_url() ?>c_ppu/iuitpp/getIuitpp', {
+            id_iuitpp: el
         }, function (r) {
             if (r) {
                 $('#jenis_perizinan').val(r.data.jenis_perizinan);
@@ -132,15 +134,17 @@
                     $('#kelurahan').html(obj);
                     $('#kelurahan').val(r.data.kelurahan);
                 });
-                $('#bidang_usaha').val(r.data.bidang_usaha);
-                $('#penanggung_jawab').val(r.data.penanggung_jawab);
-                $('#tgl_penetapan').val(r.data.tgl_penetapan);  
+                $('#nama_pemilik').val(r.data.nama_pemilik);
+                $('#alamat_pemilik').val(r.data.alamat_pemilik);
+                $('#npwp').val(r.data.npwp);
+                $('#jenis_industri').val(r.data.jenis_industri);
+                $('#tgl_penetapan').val(r.data.tgl_penetapan);
                 $('#no_registrasi').val(r.data.no_registrasi);
                 $('#nama_pejabat').val(r.data.nama_pejabat);
                 $('#jabatan').val(r.data.jabatan);
                 $('#nip').val(r.data.nip);
                 $('#jumlah_retribusi').val(r.data.jumlah_retribusi);
-                $('#id_iua').val(r.data.id_iua);
+                $('#id_iuitpp').val(r.data.id_iuitpp);
                 $('#form_status').val('edit');
                 $('#panel_list').hide();
                 $('#panel_form').show();
@@ -148,11 +152,11 @@
         }, 'json');
     }
 
-    function remove_iua(el) {
-        $.post('<?php echo base_url() ?>c_ppu/iua/delete', {
-            id_iua: el
+    function remove_iuitpp(el) {
+        $.post('<?php echo base_url() ?>c_ppu/iuitpp/delete', {
+            id_iuitpp: el
         }, function () {
-            window.location.href = '<?php echo base_url() ?>c_ppu/iua';
+            window.location.href = '<?php echo base_url() ?>c_ppu/iuitpp';
         }, 'json');
     }
 </script>
@@ -168,13 +172,13 @@
                 <div class="box-body table-responsive">
                     <div id="panel_list" class="panel panel-default">
                         <div class="panel-heading">
-                            <a href="#" id="create_iua" class="btn btn-info" onclick="create_iua()"><i class="fa fa-plus-square fa"></i></a>
+                            <a href="#" id="create_iuitpp" class="btn btn-info" onclick="create_iuitpp()"><i class="fa fa-plus-square fa"></i></a>
                             <div style="float: right"><strong>Tanggal</strong> <input type="text" id="tgl_awal" class="datepicker" value="<?php echo $tgl_awal ?>"> - <input type="text" id="tgl_akhir" class="datepicker" value="<?php echo $tgl_akhir ?>"> <button id="btn_cari" class="btn btn-info"><i class="fa fa-search"></i></button> <button id="btn_reset_cari" class="btn btn-warning"><i class="fa fa-remove"></i></button></div>
                         </div>
                         <div class="panel-body">
-                            <div style="text-align: center"><h3>Izin Usaha Angkutan</h3></div>
+                            <div style="text-align: center"><h3>Izin Usaha Industri Tanpa Melalui Persetujuan Prinsip</h3></div>
                             <div class="show_message"></div>
-                            <table id="iua_table" class="table table-bordered table-striped">
+                            <table id="iuitpp_table" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width: 20px">No.</th>
@@ -182,7 +186,7 @@
                                         <th style="width: 150px;">No Registrasi</th>
                                         <th style="width: 150px;">Tgl Buat</th>
                                         <th style="width: 150px;">Nama Perusahaan</th>
-                                        <th style="width: 150px;">Penanggung Jawab</th>
+                                        <th style="width: 150px;">Nama Pemilik</th>
                                         <th style="width: 5px;"></th>
                                         <th style="width: 5px;"></th>
                                         <!--th style="width: 5px;"></th>
@@ -192,7 +196,7 @@
                                 <tbody>
                                     <?php
                                     $i = 1;
-                                    foreach ($listIua as $r) {
+                                    foreach ($listIuitpp as $r) {
                                         if ($r['status'] == 1) {
                                             $color = 'red';
                                         } else {
@@ -205,22 +209,22 @@
                                             <td><?php echo $r['no_registrasi'] ?></td>
                                             <td><?php echo $r['tgl_pembuatan'] ?></td>
                                             <td><?php echo $r['nama_perusahaan'] ?></td>
-                                            <td><?php echo $r['penanggung_jawab'] ?></td>
+                                            <td><?php echo $r['nama_pemilik'] ?></td>
                                             <td>
-                                                <button class="btn btn-info" type="button" id="edit_iua" onclick="edit_iua(<?php echo $r['id_iua'] ?>)"><i class="fa fa-pencil"></i></button>
+                                                <button class="btn btn-info" type="button" id="edit_iuitpp" onclick="edit_iuitpp(<?php echo $r['id_iuitpp'] ?>)"><i class="fa fa-pencil"></i></button>
                                             </td>
                                             <td>
                                                 <?php if ($r['status'] != 1) { ?>
-                                                    <button class="btn btn-warning" type="button" id="remove_iua" onclick="remove_iua(<?php echo $r['id_iua'] ?>)"><i class="fa fa-trash"></i></button>
+                                                    <button class="btn btn-warning" type="button" id="remove_iuitpp" onclick="remove_iuitpp(<?php echo $r['id_iuitpp'] ?>)"><i class="fa fa-trash"></i></button>
                                                 <?php } else { ?>
                                                     <div style="text-align: center">-</div>
                                                 <?php } ?>
                                             </td>
                                             <!--td>
-                                                <button class="btn btn-success" type="button" id="print" onclick="print_iua(<?php echo $r['id_iua'] ?>, '')"><i class="fa fa-print"></i></button>
+                                                <button class="btn btn-success" type="button" id="print" onclick="print_iuitpp(<?php echo $r['id_iuitpp'] ?>, '')"><i class="fa fa-print"></i></button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary" type="button" id="print" onclick="print_iua(<?php echo $r['id_iua'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
+                                                <button class="btn btn-primary" type="button" id="print" onclick="print_iuitpp(<?php echo $r['id_iuitpp'] ?>, 'doc')"><i class="fa fa-file-word-o"></i></button>
                                             </td-->
                                         </tr>
                                         <?php
@@ -237,11 +241,11 @@
                     <div id="panel_form" class="panel panel-default">
                         <div class="panel-heading">
                             <button class="btn btn-primary" id="back_grid" onclick="back_grid()"><i class="fa fa-table"></i></button>
-                            <button class="btn btn-primary" id="save_iua" onclick="save_iua()"><i class="fa fa-save"></i></button>
+                            <button class="btn btn-primary" id="save_iuitpp" onclick="save_iuitpp()"><i class="fa fa-save"></i></button>
                         </div>
                         <div class="panel-body">
                             <div class="show_error"></div>
-                            <form id="form_iua">
+                            <form id="form_iuitpp">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         Input Izin
@@ -262,7 +266,7 @@
                                             </div>
                                             <div class="col-lg-2">
                                                 <input type="hidden" id="form_status" >
-                                                <input type="hidden" id="id_iua" >
+                                                <input type="hidden" id="id_iuitpp" >
                                                 <input type="text" class="form-control input-sm datepicker" id="tgl_pembuatan"/>
                                             </div>
                                         </div>
@@ -287,7 +291,7 @@
                                         <br/>
                                         <ul class="nav nav-tabs">
                                             <li class="active"><a data-toggle="tab" href="#info_perusahaan">Informasi Perusahaan</a></li>
-                                            <li><a data-toggle="tab" href="#info_lain">Informasi Lainnya</a></li>
+                                            <!--li><a data-toggle="tab" href="#info_lain">Informasi Lainnya</a></li-->
                                             <li><a data-toggle="tab" href="#info_penetapan">Informasi Penetapan</a></li>
                                         </ul>
                                         <div class="tab-content">
@@ -358,27 +362,45 @@
                                                 <br/>
                                                 <div class="row">
                                                     <div class="col-lg-2">
-                                                        <label for="bidang_usaha">Bidang Usaha : </label>
+                                                        <label for="nama_pemilik">Nama Pemilik : </label>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <textarea class="form-control input-sm" id="bidang_usaha"></textarea>
+                                                        <input type="text" class="form-control input-sm" id="nama_pemilik"/>
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="row">
+                                                    <div class="col-lg-2">
+                                                        <label for="alamat_pemilik">Alamat Pemilk : </label>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <textarea class="form-control input-sm" id="alamat_pemilik"></textarea>
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="row">
+                                                    <div class="col-lg-2">
+                                                        <label for="npwp">NPWP : </label>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control input-sm" id="npwp"/>
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="row">
+                                                    <div class="col-lg-2">
+                                                        <label for="jenis_industri">Jenis Industri : </label>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <textarea class="form-control input-sm" id="jenis_industri"></textarea>
                                                     </div>
                                                 </div>
                                                 <br/>
 
                                             </div>
-                                            <div id="info_lain" class="tab-pane fade">
+                                            <!--div id="info_lain" class="tab-pane fade">
                                                 <br><br>
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <label for="penanggung_jawab">Penanggung Jawab : </label>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <input type="text" class="form-control input-sm" id="penanggung_jawab"/>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                            </div>
+                                            </div-->
                                             <div id="info_penetapan" class="tab-pane fade">
                                                 <br><br>
                                                 <div class="row">

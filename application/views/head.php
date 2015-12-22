@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title><?php echo empty($title)?'Sistem Pelayanan Perizinan':$title?></title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <link href='<?php echo base_url()?>inc/img/logos.png' rel='shortcut icon'>
         <link href="<?php echo base_url();?>inc/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         
         <link href="<?php echo base_url();?>inc/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
