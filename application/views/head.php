@@ -60,4 +60,9 @@
         <!--script type='text/javascript' src='<?php echo base_url()?>inc/js_has/jquery.ba-hashchange.min.js'></script>
         <script type='text/javascript' src='<?php echo base_url()?>inc/js_has/dynamicpage.js'></script-->
         
+        <link href="<?php echo base_url()?>inc/css/kingtable.css" rel="stylesheet">
+        <link href="<?php echo base_url()?>inc/css/kingtable.clear.css" rel="stylesheet">
+        <link href="<?php echo base_url()?>inc/css/master.css" rel="stylesheet">
+        
+        <script src="<?php echo base_url()?>inc/js/jquery.validate.min.js"></script>
     </head>

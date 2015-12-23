@@ -1,12 +1,6 @@
-<head>
-    <style type="text/css">
+<style type="text/css">
         .layout-report{
-            width:1100px;
-
-        }
-
-        .layout-report{
-            width:1100px;
+            width:100%;
             height: auto;
             overflow-x: scroll;
         }
@@ -18,9 +12,8 @@
         .tablereport td{
             font-size:12px;
         }
-    </style>
-</head>
-<body>
+</style>
+    
     <?php
     if (!$type) {
         $classnya = 'layout-report';
@@ -30,9 +23,10 @@
         $align = 'center';
     }
     ?>
+    
     <div class="<?php echo $classnya ?>">
 
-        <table align="<?php echo $align ?>" width="700px">
+        <table align="<?php echo $align ?>" width="100%">
             <tr>
                 <td width="100px"><img src="<?php echo base_url() ?>inc/img/logohp.jpg" width="100px" height="100px"></td>
                 <td valign="top" widht="600px"><strong>PEMERINTAHAN KOTA SERANG<br>BADAN PELAYANAN TERPADU DAN PENANAMAN MODAL</strong>
@@ -59,7 +53,7 @@
             <tr>
                 <td>PERIODE</td>
                 <td>:</td>
-                <td><?php echo $tgl_awal.' Sampai '.$tgl_akhir?></td>
+                <td><?php echo convert_to_id($tgl_awal,FALSE).' Sampai '.convert_to_id($tgl_akhir,FALSE)?></td>
             </tr>
             <tr>
                 <td>JENIS IZIN</td>
@@ -86,19 +80,19 @@
                     <th  width="150" bgcolor="#E4E4E4" scope="col">PEMOHON</th>
                 </tr>
                 <?php
-                $i = 1;
+                $i = $row_start;
                 foreach ($results as $r) {
                     ?>
                     <tr>
-                        <td><?php echo $i ?></td>
-                        <td><?php echo $r['tgl_pembuatan'] ?></td>
-                        <td><?php echo $r['no_pelayanan'] ?></td>
-                        <td><?php echo $r['nama_perusahaan'] ?></td>
-                        <td><?php echo $r['penanggung_jawab'] ?></td>
-                        <td><?php echo $r['alamat'] ?></td>
-                        <td><?php echo $r['kota'] ?></td>
-                        <td><?php echo $r['kecamatan'] ?></td>
-                        <td>Non Retribusi</td>
+                        <td style="padding: 5px"><?php echo $i ?></td>
+                        <td style="padding: 5px"><?php echo convert_to_id($r['tgl_pembuatan'],FALSE) ?></td>
+                        <td style="padding: 5px"><?php echo $r['no_pelayanan'] ?></td>
+                        <td style="padding: 5px"><?php echo $r['nama_perusahaan'] ?></td>
+                        <td style="padding: 5px"><?php echo $r['penanggung_jawab'] ?></td>
+                        <td style="padding: 5px"><?php echo $r['alamat'] ?></td>
+                        <td style="padding: 5px"><?php echo $r['kota'] ?></td>
+                        <td style="padding: 5px"><?php echo $r['kecamatan'] ?></td>
+                        <td style="padding: 5px">Non Retribusi</td>
                     </tr>
                     <?php
                     $i++;
@@ -115,7 +109,7 @@
             <tr>
                 <td width="200px">JUMLAH PELAYANAN</td>
                 <td width="50px">:</td>
-                <td width="400px"><?php echo $i?> PELAYANAN</td>
+                <td width="400px"><span id="jumlah_pelayanan"></span> PELAYANAN</td>
                 <td colspan="3">Serang</td>
             </tr>
             <tr>
@@ -140,4 +134,3 @@
             </tr>
         </table>
     </div>
-</body>

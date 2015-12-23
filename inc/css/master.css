@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+.header-page{
+	width: 100%;
+	border: solid thin #d0d0d0;
+}
+
+.error{
+	color: red;
+	font-size: 12px;
+	font-weight: normal;
+}

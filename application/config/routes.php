@@ -41,6 +41,9 @@
 $route['default_controller'] = "login";
 $route['404_override'] = '';
 
+$route['api/report/usaha/(:any)/list.json'] = 'report_usaha/jenisIzin/getReport/$1';
+$route['report/usaha/(:any)/download.docx'] = 'report_usaha/jenisIzin/downloadWord/$1';
+$route['report/usaha/(:any)/download.pdf'] = 'report_usaha/jenisIzin/downloadPDF/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
