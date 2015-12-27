@@ -19,7 +19,8 @@
                             <td>
                                 <div class="list-group">
                                     <a href="<?php echo base_url()?>c_ppu/imb" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Mendirikan Bangunan ( IMB )</a>
-                                    <a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Mendirikan Bangunan Menara ( IMBM )</a>
+                                    <!--a href="#" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Mendirikan Bangunan Menara ( IMBM )</a-->
+                                    <a href="<?php echo base_url()?>c_ppu/perluasan" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Perluasan</a>
                                     <a href="<?php echo base_url()?>c_ppu/iujk" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Usaha Jasa Konstruksi ( IUJK )</a>
                                     <a href="<?php echo base_url()?>c_ppu/ipr" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Izin Pemasangan Reklame</a>
                                     <a href="<?php echo base_url()?>c_ppu/tdi" class="list-group-item"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Tanda Daftar Industri ( TDI )</a>

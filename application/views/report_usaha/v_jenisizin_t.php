@@ -61,7 +61,7 @@
                 <td>:</td>
                 <td colspan="2">
                     <?php
-                    if($filter_type=='bulan'){
+                    if ($filter_type == 'bulan') {
                         echo getBulan($tgl_bulan);
                     } else {
                         echo getTglBulan($tgl_awal) . ' s/d ' . getTglBulan($tgl_akhir);
@@ -75,27 +75,34 @@
                 <td><?php echo getNamaIzin($jenis_perizinan) ?></td>
             </tr>
         </table>
-        <br>
+    </table>
+    <?php
+    foreach ($typeIzin as $key => $value) {
+        ?>
+
         <table align="<?php echo $align ?>" class="tablereport" width="1200" border="1" cellspacing="0" cellpadding="0">
             <tbody>
-                <tr>
-                    <th  width="50" rowspan="2" bgcolor="#E4E4E4" scope="col">NO</th>
-                    <th  colspan="2" bgcolor="#E4E4E4" scope="col">PENDAFTARAN</th>
-                    <th  colspan="2" bgcolor="#E4E4E4" scope="col">NAMA</th>
-                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">ALAMAT</th>
-                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KOTA</th>
-                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KECAMATAN</th>
-                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KETERANGAN</th>
-                </tr>
-                <tr>
-                    <th  width="100" bgcolor="#E4E4E4" scope="col">TANGGAL</th>
-                    <th  width="150" bgcolor="#E4E4E4" scope="col">NOMOR</th>
-                    <th  width="150" bgcolor="#E4E4E4" scope="col">PERUSAHAAN</th>
-                    <th  width="150" bgcolor="#E4E4E4" scope="col">PEMOHON</th>
-                </tr>
-                <?php
-                $i = 1;
-                foreach ($results as $r) {
+            <caption style="text-align: left">Type : <?php echo $value ?></caption>
+            <tr>
+                <th  width="50" rowspan="2" bgcolor="#E4E4E4" scope="col">NO</th>
+                <th  colspan="2" bgcolor="#E4E4E4" scope="col">PENDAFTARAN</th>
+                <th  colspan="2" bgcolor="#E4E4E4" scope="col">NAMA</th>
+                <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">ALAMAT</th>
+                <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KOTA</th>
+                <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KECAMATAN</th>
+                <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KETERANGAN</th>
+            </tr>
+            <tr>
+                <th  width="100" bgcolor="#E4E4E4" scope="col">TANGGAL</th>
+                <th  width="150" bgcolor="#E4E4E4" scope="col">NOMOR</th>
+                <th  width="150" bgcolor="#E4E4E4" scope="col">PERUSAHAAN</th>
+                <th  width="150" bgcolor="#E4E4E4" scope="col">PEMOHON</th>
+            </tr>
+            <?php
+            $i = 1;
+            $total=0;
+            foreach ($results as $r) {
+                if ($r['type'] == $key) {
                     ?>
                     <tr>
                         <td><?php echo $i ?></td>
@@ -109,43 +116,56 @@
                         <td><?php echo $r['keterangan'] ?></td>
                     </tr>
                     <?php
+                    $total = $total +1;
                     $i++;
                 }
-                ?>
+            }
+            ?>
             </tbody>
         </table>
         <br><br>
-
-        <table width="1100px" align="<?php echo $align ?>">
-            <tr>
-                <td>KETERANGAN</td>
-            </tr>
+        <table width="1100px">
             <tr>
                 <td width="200px">JUMLAH PELAYANAN</td>
                 <td width="50px">:</td>
-                <td width="400px"><?php echo $i ?> PELAYANAN</td>
-                <td colspan="3">Serang</td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td colspan="3">-</td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td colspan="3" align="center">Kepala Badan Pelayanan Terpadu dan Penanaman Modal<br>Kota Serang</td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td colspan="3"><br><br><br><br><br>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td colspan="3" align="center"><strong><u>MAMAT HAMBALI, SH. ,M.SI</u></strong></td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td colspan="3" align="center">NIP : 19610704 198603 1 013</td>
+                <td width="400px"><?php echo $total ?> PELAYANAN</td>
             </tr>
         </table>
-    </div>
+        <?php
+    }
+    ?>
+    <br><br>
+
+    <table width="1100px" align="<?php echo $align ?>">
+        <tr>
+            <td>KETERANGAN</td>
+        </tr>
+        <tr>
+            <td width="200px">JUMLAH PELAYANAN</td>
+            <td width="50px">:</td>
+            <td width="400px"><?php echo $i ?> PELAYANAN</td>
+            <td colspan="3">Serang</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="3">-</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="3" align="center">Kepala Badan Pelayanan Terpadu dan Penanaman Modal<br>Kota Serang</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="3"><br><br><br><br><br>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="3" align="center"><strong><u>MAMAT HAMBALI, SH. ,M.SI</u></strong></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="3" align="center">NIP : 19610704 198603 1 013</td>
+        </tr>
+    </table>
+</div>
 </body>

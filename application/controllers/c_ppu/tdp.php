@@ -14,7 +14,8 @@ class Tdp extends CI_Controller {
             $d['tgl_awal'] = $this->session->userdata('tgl_awal');
             $d['tgl_akhir'] = $this->session->userdata('tgl_akhir');
             //echo 'tes'.$d['tgl_awal'];
-            $d['type_perusahaan'] = $this->m_global->getTypePerusahaan("");
+            //$d['type_perusahaan'] = $this->m_global->getTypePerusahaan("");
+            $d['type_perusahaan'] = getTypeIzin('ppu_tdp');
             $d['jenis_perusahaan'] = $this->m_global->getJenisPerusahaan("");
             $d['getStatus'] = $this->m_global->getStatusPerusahaan("");
             
