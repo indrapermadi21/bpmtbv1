@@ -70,7 +70,7 @@
             jenis_perizinan: $('#jenis_perizinan').val(),
             tgl_pembuatan: $('#tgl_pembuatan').val(),
             no_pelayanan: $('#no_pelayanan').val(),
-            type_perusahaan: $('#type_perusahaan').val(),
+            type: $('#type').val(),
             jenis_perusahaan: $('#jenis_perusahaan').val(),
             perusahaan_ke: $('#perusahaan_ke').val(),
             nama_perusahaan: $('#nama_perusahaan').val(),
@@ -144,7 +144,7 @@
                 $('#tgl_pembuatan').val(r.data.tgl_pembuatan);
                 $('#no_pelayanan').val(r.data.no_pelayanan);
                 $('#keterangan').val(r.data.keterangan);
-                $('#type_perusahaan').val(r.data.type_perusahaan);
+                $('#type').val(r.data.type);
                 $('#jenis_perusahaan').val(r.data.jenis_perusahaan);
                 $('#perusahaan_ke').val(r.data.perusahaan_ke);
 
@@ -334,16 +334,16 @@
                                         <br/>
                                         <div class="row">
                                             <div class="col-lg-2">
-                                                <label for="type_perusahaan">Type Perusahaan : </label>
+                                                <label for="type">Type Perusahaan : </label>
                                             </div>
                                             <div class="col-lg-4">
-                                                <select class="form-control input-sm" id="type_perusahaan">
+                                                <select class="form-control input-sm" id="type">
 
                                                     <option value="0">-</option>
                                                     <?php
-                                                    foreach ($type_perusahaan as $r) {
+                                                    foreach ($type_perusahaan as $key => $value) {
                                                         ?>
-                                                        <option value="<?php echo $r->id_tipe ?>"><?php echo $r->tipe_perusahaan ?></option>
+                                                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
                                                         <?php
                                                     }
                                                     ?>

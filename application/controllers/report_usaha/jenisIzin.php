@@ -8,6 +8,9 @@ class JenisIzin extends CI_Controller {
     }
 
     function index() {
+    	$d['jenisPerizinan'] = getTabelJenisPerizinan();
+    	//debugy($d['jenisPerizinan']);
+    			
         $d['content'] = 'report_usaha/filter_report';
         $this->load->view('template',$d);
     }
@@ -20,6 +23,27 @@ class JenisIzin extends CI_Controller {
         $data['jenis_perizinan'] = $this->input->post('jenis_perizinan');
         $data['tgl_awal'] = convert_tgl($this->input->post('tgl_awal'));
         $data['tgl_akhir'] = convert_tgl($this->input->post('tgl_akhir'));
+        
+        $data['per_type'] = $this->input->post('per_type');
+        $data['per_kec'] = $this->input->post('per_kec');
+        $data['filter_type'] = $this->input->post('filter_type');
+        
+        //$data['results'] = $this->m_jenisizin->getData($data['jenis_perizinan'], $data['tgl_awal'], $data['tgl_akhir'], $data['tgl_bulan'],$data['filter_type']);
+        $data['typeIzin'] = getTypeIzin($data['jenis_perizinan']);
+        $data['listKecamatan'] = $this->m_global->getKecamatan();
+        //debugy($data);
+
+        		if ($data['per_type'] == 'yes' && $data['per_kec'] == 'no') {
+        			$view = 'v_jenisizin_t';
+        		} elseif ($data['per_type'] == 'no' && $data['per_kec'] == 'yes') {
+        			$view = 'v_jenisizin_k';
+        		} elseif ($data['per_type'] == 'yes' && $data['per_kec'] == 'yes') {
+        			$view = 'v_jenisizin_tk';
+        		} else {
+        			$view = 'v_jenisizinusaha';
+        		}
+        		
+        		
         $data['type']  = '';
         switch ($data['jenis_perizinan']){
             case 'siup' : 

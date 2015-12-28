@@ -66,3 +66,4 @@
         
         <script src="<?php echo base_url()?>inc/js/jquery.validate.min.js"></script>
     </head>
+    
