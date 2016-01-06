@@ -27,14 +27,33 @@ define('DIR_WRITE_MODE', 0777);
 */
 define('MAX_ROW_PER_PAGE', 16);
 
+define('FILTER_TYPE_PERIOD', 'period');
+define('FILTER_TYPE_BULAN', 'bulan');
+
+define('YES', 'yes');
+define('NO', 'no');
+
+define('KEY_COLUMN_TYPE', 'column_type');
+define('KEY_COLUMN_ID', 'column_id');
+
 /*
 |--------------------------------------------------------------------------
-| File Stream Modes
+| Type 
 |--------------------------------------------------------------------------
 |
-| These modes are used when working with fopen()/popen()
+| 
 |
 */
+
+
+/*
+ |--------------------------------------------------------------------------
+ | File Stream Modes
+ |--------------------------------------------------------------------------
+ |
+ | These modes are used when working with fopen()/popen()
+ |
+ */
 
 define('FOPEN_READ',							'rb');
 define('FOPEN_READ_WRITE',						'r+b');

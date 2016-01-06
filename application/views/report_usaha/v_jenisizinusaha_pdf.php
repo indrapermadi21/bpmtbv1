@@ -54,12 +54,18 @@
                 <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;PERIZINAN USAHA</td>
             </tr>
             <tr>
-                <td width="100">PERIODE</td>
-                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;<?php echo convert_to_id($tgl_awal,FALSE).' Sampai '.convert_to_id($tgl_akhir,FALSE)?></td>
+                <td width="100"><?=strtoupper($filter_type)?></td>
+                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;<?php
+                    if ($filter_type == 'bulan') {
+                        echo convert_to_id_month($tgl_bulan);
+                    } else {
+                        echo convert_to_id($tgl_awal) . ' s/d ' . convert_to_id($tgl_akhir);
+                    }
+                    ?></td>
             </tr>
             <tr>
                 <td width="100">JENIS IZIN</td>
-                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;SURAT IZIN USAHA PERDAGANGAN</td>
+                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;<?=strtoupper($nameIzin)?></td>
             </tr>
         </table>
         <br>

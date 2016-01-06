@@ -193,7 +193,7 @@ class TemplateProcessor
 
         $tagPos = strpos($this->tempDocumentMainPart, $search);
         if (!$tagPos) {
-            throw new Exception("Can not clone row, template variable not found or variable contains markup.");
+            throw new Exception("Can not clone row {$search}, template variable not found or variable contains markup.");
         }
 
         $rowStart = $this->findRowStart($tagPos);
@@ -202,7 +202,7 @@ class TemplateProcessor
 
         // Check if there's a cell spanning multiple rows.
         if (preg_match('#<w:vMerge w:val="restart"/>#', $xmlRow)) {
-            // $extraRowStart = $rowEnd;
+//             $extraRowStart = $rowEnd;
             $extraRowEnd = $rowEnd;
             while (true) {
                 $extraRowStart = $this->findRowStart($extraRowEnd + 1);
@@ -247,13 +247,17 @@ class TemplateProcessor
     {
         $xmlBlock = null;
         preg_match(
-            '/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+//             '/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            '/(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
             $this->tempDocumentMainPart,
             $matches
         );
+        
+//         var_dump($matches);
+//         exit;
 
-        if (isset($matches[3])) {
-            $xmlBlock = $matches[3];
+        if (isset($matches[2])) {
+            $xmlBlock = $matches[2];
             $cloned = array();
             for ($i = 1; $i <= $clones; $i++) {
                 $cloned[] = $xmlBlock;
@@ -261,10 +265,15 @@ class TemplateProcessor
 
             if ($replace) {
                 $this->tempDocumentMainPart = str_replace(
-                    $matches[2] . $matches[3] . $matches[4],
+                    $matches[2] . $matches[3],
                     implode('', $cloned),
                     $this->tempDocumentMainPart
                 );
+                $this->tempDocumentMainPart = str_replace(
+                    '${'.$blockname.'}',
+                    '',
+                    $this->tempDocumentMainPart
+                ); 
             }
         }
 

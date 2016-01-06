@@ -6,18 +6,18 @@ class M_jenisizin extends MY_Model {
         parent::__construct();
     }
     
-	function getData($table, $tgl_awal, $tgl_akhir, $tgl_bulan,$filter_type) {
-        if ($filter_type == 'bulan') {
-            $query_tgl = 'AND tgl_pembuatan LIKE "SUBSTR(' . $tgl_bulan . ',0,6)%"';
-        } else {
-            $query_tgl = 'AND tgl_pembuatan >= "' . $tgl_awal . '" AND tgl_pembuatan <="' . $tgl_akhir . '" ';
-        }
-        $result = $this->db->query("
-                    SELECT * FROM " . $table . " WHERE jenis_perizinan <> '' " . $query_tgl . "
-                ")->result_array();
+// 	function getData($table, $tgl_awal, $tgl_akhir, $tgl_bulan,$filter_type) {
+//         if ($filter_type == 'bulan') {
+//             $query_tgl = 'AND tgl_pembuatan LIKE "SUBSTR(' . $tgl_bulan . ',0,6)%"';
+//         } else {
+//             $query_tgl = 'AND tgl_pembuatan >= "' . $tgl_awal . '" AND tgl_pembuatan <="' . $tgl_akhir . '" ';
+//         }
+//         $result = $this->db->query("
+//                     SELECT * FROM " . $table . " WHERE jenis_perizinan <> '' " . $query_tgl . "
+//                 ")->result_array();
 
-        return $result;
-    }
+//         return $result;
+//     }
     
 	/*function getSiup($tgl_awal, $tgl_akhir) {
 
@@ -31,18 +31,105 @@ class M_jenisizin extends MY_Model {
         return $query->result_array();
     }*/
     
-    public function getSiup($page, $limit, $tgl_awal, $tgl_akhir)
+    public function getData($table, $page, $limit, $columns, $tgl_awal, $tgl_akhir, $tgl_bulan, $filter_type, $per_type, $per_kec)
     {
     	$param = array();
-    	$param['id_siup <>'] = 0;
+    	$param[$columns[KEY_COLUMN_ID].' <>'] = 0;
     	$param['status <>'] = 1;
-    	if (!is_null($tgl_awal)) $param['tgl_pembuatan >='] = $tgl_awal;
-    	if (!is_null($tgl_akhir)) $param['tgl_pembuatan <='] = $tgl_akhir;
+    	
+    	if ($filter_type == FILTER_TYPE_PERIOD)
+    	{
+	    	if (!is_null($tgl_awal)) $param['tgl_pembuatan >='] = $tgl_awal;
+	    	if (!is_null($tgl_akhir)) $param['tgl_pembuatan <='] = $tgl_akhir;
+    	}
+    	else 
+    	{
+    		$tgl_bulan = explode('-', $tgl_bulan);
+    		if (count($tgl_bulan)==2)
+    		{
+    			if (!is_null($tgl_bulan[0]) && $tgl_bulan[0] != '') $param["MONTH(tgl_pembuatan)"] = $tgl_bulan[0];
+    			if (!is_null($tgl_bulan[1]) && $tgl_bulan[1] != '') $param["YEAR(tgl_pembuatan)"] = $tgl_bulan[1];
+    		}
+    		else
+    		{
+    			return array();
+    		}
+    	}
+    	
+    	
+    	$select = $this->db->select($table.'.*, ms_kecamatan.kecamatan AS nama_kecamatan')
+    		->from($table)
+    		->join('ms_kecamatan', $table.'.kecamatan = ms_kecamatan.kd_kecamatan', 'left')
+    		->where($param);
+    	
+    	if ($per_type == YES && $per_kec == NO){
+    		$select = $select->order_by("{$columns[KEY_COLUMN_TYPE]} ASC, tgl_pembuatan DESC");
+    	} else if ($per_type == NO && $per_kec == YES){
+    		$select = $select->order_by("kecamatan ASC, tgl_pembuatan DESC");
+    	} else if ($per_type == YES && $per_kec == YES){
+    		$select = $select->order_by("{$columns[KEY_COLUMN_TYPE]} ASC, kecamatan ASC, tgl_pembuatan DESC");
+    	} else {
+    		$select = $select->order_by("tgl_pembuatan DESC");
+    	}
+    	
+	    $select = $select->limit($limit, $this->start($page, $limit))->get();
+    	
+// 	    echo $this->db->last_query();
+// 	    exit;
+	    
+    	if ($select->num_rows() > 0)
+    	{
+    		$result = $select->result_array();
+    		$select->free_result();
+    		return $result;
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+    
+    public function getAllData($table, $columns, $tgl_awal, $tgl_akhir, $tgl_bulan, $filter_type, $per_type, $per_kec)
+    {
+    	$param = array();
+    	$param[$columns[KEY_COLUMN_ID].' <>'] = 0;
+    	$param['status <>'] = 1;
+    	
+    	if ($filter_type == FILTER_TYPE_PERIOD)
+    	{
+	    	if (!is_null($tgl_awal)) $param['tgl_pembuatan >='] = $tgl_awal;
+	    	if (!is_null($tgl_akhir)) $param['tgl_pembuatan <='] = $tgl_akhir;
+    	}
+    	else 
+    	{
+    		$tgl_bulan = explode('-', $tgl_bulan);
+    		if (count($tgl_bulan)==2)
+    		{
+    			if (!is_null($tgl_bulan[0]) && $tgl_bulan[0] != '') $param["MONTH(tgl_pembuatan)"] = $tgl_bulan[0];
+    			if (!is_null($tgl_bulan[1]) && $tgl_bulan[1] != '') $param["YEAR(tgl_pembuatan)"] = $tgl_bulan[1];
+    		}
+    		else
+    		{
+    			return array();
+    		}
+    	}
     	 
-    	$select = $this->db->where($param)
-    		->order_by('tgl_pembuatan', 'desc')
-	    	->limit($limit, $this->start($page, $limit))
-	    	->get('ppu_siup');
+    	$select = $this->db->select($table.'.*, ms_kecamatan.kecamatan AS nama_kecamatan')
+    		->from($table)
+    		->join('ms_kecamatan', $table.'.kecamatan = ms_kecamatan.kd_kecamatan', 'left')
+    		->where($param);
+    	
+    	if ($per_type == YES && $per_kec == NO){
+    		$select = $select->order_by("{$columns[KEY_COLUMN_TYPE]} ASC, tgl_pembuatan DESC");
+    	} else if ($per_type == NO && $per_kec == YES){
+    		$select = $select->order_by("kecamatan ASC, tgl_pembuatan DESC");
+    	} else if ($per_type == YES && $per_kec == YES){
+    		$select = $select->order_by("{$columns[KEY_COLUMN_TYPE]} ASC, kecamatan ASC, tgl_pembuatan DESC");
+    	} else {
+    		$select = $select->order_by("tgl_pembuatan DESC");
+    	}
+    	
+	    $select = $select->get();
     	 
     	if ($select->num_rows() > 0)
     	{
@@ -56,41 +143,32 @@ class M_jenisizin extends MY_Model {
     	}
     }
     
-    public function getAllSiup($tgl_awal, $tgl_akhir)
+    public function countData($table, $columns, $tgl_awal, $tgl_akhir, $tgl_bulan, $filter_type, $per_type, $per_kec)
     {
     	$param = array();
-    	$param['id_siup <>'] = 0;
+    	$param[$columns[KEY_COLUMN_ID].' <>'] = 0;
     	$param['status <>'] = 1;
-    	if (!is_null($tgl_awal)) $param['tgl_pembuatan >='] = $tgl_awal;
-    	if (!is_null($tgl_akhir)) $param['tgl_pembuatan <='] = $tgl_akhir;
-    	 
-    	$select = $this->db->where($param)
-    		->order_by('tgl_pembuatan', 'desc')
-	    	->get('ppu_siup');
-    	 
-    	if ($select->num_rows() > 0)
+    	
+    	if ($filter_type == FILTER_TYPE_PERIOD)
     	{
-    		$result = $select->result_array();
-    		$select->free_result();
-    		return $result;
+	    	if (!is_null($tgl_awal)) $param['tgl_pembuatan >='] = $tgl_awal;
+	    	if (!is_null($tgl_akhir)) $param['tgl_pembuatan <='] = $tgl_akhir;
     	}
-    	else
+    	else 
     	{
-    		return array();
+    		$tgl_bulan = explode('-', $tgl_bulan);
+    		if (count($tgl_bulan)==2)
+    		{
+    			if (!is_null($tgl_bulan[0]) && $tgl_bulan[0] != '') $param["MONTH(tgl_pembuatan)"] = $tgl_bulan[0];
+    			if (!is_null($tgl_bulan[1]) && $tgl_bulan[1] != '') $param["YEAR(tgl_pembuatan)"] = $tgl_bulan[1];
+    		}
+    		else
+    		{
+    			return 0;
+    		}
     	}
-    }
-    
-    public function countSiup($tgl_awal, $tgl_akhir)
-    {
-    	$param = array();
-    	$param['id_siup <>'] = 0;
-    	$param['status <>'] = 2;
-    	if (!is_null($tgl_awal)) $param['tgl_pembuatan >='] = $tgl_awal;
-    	if (!is_null($tgl_akhir)) $param['tgl_pembuatan <='] = $tgl_akhir;
     	 
-    	return $this->db->where($param)
-    		->order_by('tgl_pembuatan', 'desc')
-	    	->count_all_results('ppu_siup');
+    	return $this->db->where($param)->count_all_results($table);
     }
     
     function get_user($kd_user) {

@@ -51,14 +51,20 @@
                 <td width="400px"></td>
             </tr>
             <tr>
-                <td>PERIODE</td>
+                <td><?=strtoupper($filter_type)?></td>
                 <td>:</td>
-                <td><?php echo convert_to_id($tgl_awal,FALSE).' Sampai '.convert_to_id($tgl_akhir,FALSE)?></td>
+                <td><?php
+                    if ($filter_type == 'bulan') {
+                        echo convert_to_id_month($tgl_bulan);
+                    } else {
+                        echo convert_to_id($tgl_awal) . ' s/d ' . convert_to_id($tgl_akhir);
+                    }
+                    ?></td>
             </tr>
             <tr>
                 <td>JENIS IZIN</td>
                 <td>:</td>
-                <td>SURAT IZIN USAHA PERDAGANGAN</td>
+                <td><?=strtoupper($nameIzin)?></td>
             </tr>
         </table>
         <br>
@@ -91,7 +97,7 @@
                         <td style="padding: 5px"><?php echo $r['penanggung_jawab'] ?></td>
                         <td style="padding: 5px"><?php echo $r['alamat'] ?></td>
                         <td style="padding: 5px"><?php echo $r['kota'] ?></td>
-                        <td style="padding: 5px"><?php echo $r['kecamatan'] ?></td>
+                        <td style="padding: 5px"><?php echo $r['nama_kecamatan'] ?></td>
                         <td style="padding: 5px">Non Retribusi</td>
                     </tr>
                     <?php

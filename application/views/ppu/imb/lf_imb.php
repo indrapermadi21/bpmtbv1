@@ -414,7 +414,7 @@
                                                     </div>
                                                 </div>
                                                 <br/>
-                                                <div class="row"<div class="row">
+                                                <div class="row">
                                                     <div class="col-lg-3">
                                                         <label for="kecamatan">Kecamatan : </label>
                                                     </div>

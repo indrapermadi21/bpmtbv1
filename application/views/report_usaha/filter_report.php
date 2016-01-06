@@ -7,10 +7,20 @@
 
 	var tgl_awal = '';
 	var tgl_akhir = '';
+	var tgl_bulan = '';
 	var jenis_perizinan = '';
+	var filter_type = '';
+	var per_type = '';
+	var per_kecamatan = '';
 
     $(document).ready(function () {
     	$("#form").validate();
+
+    	refreshFilter($('#filter_type').val());
+    	$('#filter_type').change(function(){
+        	refreshFilter($(this).val());
+        });
+
     	
         $(".datepicker").datepicker({
             changeMonth: true,
@@ -18,12 +28,37 @@
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
         });
+
+        $(".monthpicker").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+
+            onClose: function(dateText, inst) {  
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+                $(this).val($.datepicker.formatDate('mm-yy', new Date(year, month, 1)));
+            }
+        });
+
+        $(".monthpicker").focus(function () {
+            $(".ui-datepicker-calendar").hide();
+            $("#ui-datepicker-div").position({
+                my: "center top",
+                at: "center bottom",
+                of: $(this)
+            });    
+        });
         
         $('#filter_data').click(function(){
         	if ($("#form").valid()) {
 	            tgl_awal = $('#tgl_awal').val();
 	            tgl_akhir = $('#tgl_akhir').val();
+	            tgl_bulan = $('#tgl_bulan').val();
 	            jenis_perizinan = $('#jenis_perizinan').val();
+	            filter_type = $('#filter_type').val();
+	            per_type = $('#per_type').val();
+	            per_kecamatan = $('#per_kecamatan').val();
 	            page_current = 1;
 	
 	            reloadData();
@@ -32,25 +67,53 @@
         
         $('#preview_data').click(function(){
         	if ($("#form").valid()) {
-	            var data = {
-	                tgl_awal : $('#tgl_awal').val(),
-	                tgl_akhir : $('#tgl_akhir').val(),
-	                jenis_perizinan : $('#jenis_perizinan').val()
-	            };
+        		tgl_awal = $('#tgl_awal').val();
+	            tgl_akhir = $('#tgl_akhir').val();
+	            tgl_bulan = $('#tgl_bulan').val();
+	            jenis_perizinan = $('#jenis_perizinan').val();
+	            filter_type = $('#filter_type').val();
+	            per_type = $('#per_type').val();
+	            per_kecamatan = $('#per_kecamatan').val();
 	            
-	            window.open('<?php echo base_url() ?>report/usaha/' + data.jenis_perizinan+ '/download.pdf?awal=' + data.tgl_awal + '&akhir='+ data.tgl_akhir);
+	            var data = {
+	            		tgl_awal : tgl_awal,
+	                    tgl_akhir : tgl_akhir,
+	                    tgl_bulan : tgl_bulan,
+	                    jenis_perizinan : jenis_perizinan,
+	                    filter_type : filter_type,
+	                    per_type : per_type,
+	                    per_kecamatan : per_kecamatan
+	            };
+
+	            var param = decodeURIComponent( $.param(data) );
+	            
+	            window.open('<?php echo base_url() ?>report/usaha/' + data.jenis_perizinan+ '/download.pdf?' + param);
         	} 
         });
         
         $('#export_data').click(function(){
         	if ($("#form").valid()) {
-	            var data = {
-	                tgl_awal : $('#tgl_awal').val(),
-	                tgl_akhir : $('#tgl_akhir').val(),
-	                jenis_perizinan : $('#jenis_perizinan').val()
-	            };
+        		tgl_awal = $('#tgl_awal').val();
+	            tgl_akhir = $('#tgl_akhir').val();
+	            tgl_bulan = $('#tgl_bulan').val();
+	            jenis_perizinan = $('#jenis_perizinan').val();
+	            filter_type = $('#filter_type').val();
+	            per_type = $('#per_type').val();
+	            per_kecamatan = $('#per_kecamatan').val();
 	            
-	            window.location.href = '<?php echo base_url() ?>report/usaha/' + data.jenis_perizinan+ '/download.docx?awal=' + data.tgl_awal + '&akhir='+ data.tgl_akhir;
+	            var data = {
+	            		tgl_awal : tgl_awal,
+	                    tgl_akhir : tgl_akhir,
+	                    tgl_bulan : tgl_bulan,
+	                    jenis_perizinan : jenis_perizinan,
+	                    filter_type : filter_type,
+	                    per_type : per_type,
+	                    per_kecamatan : per_kecamatan
+	            };
+
+	            var param = decodeURIComponent( $.param(data) );
+	            
+	            window.location.href = '<?php echo base_url() ?>report/usaha/' + data.jenis_perizinan+ '/download.docx?' + param;
         	} 
         });
 
@@ -70,6 +133,16 @@
         	refresh();
         });
     });
+
+    function refreshFilter(filterType){
+    	if (filterType == 'bulan'){
+        	$('#bulan').fadeIn();
+        	$('#period').hide();
+    	} else {
+    		$('#bulan').hide();
+        	$('#period').fadeIn();
+    	}
+    }
 
     function refresh(){
         var page_number = $('#page-number').val();
@@ -108,7 +181,11 @@
     	var data = {
                 tgl_awal : tgl_awal,
                 tgl_akhir : tgl_akhir,
+                tgl_bulan : tgl_bulan,
                 jenis_perizinan : jenis_perizinan,
+                filter_type : filter_type,
+                per_type : per_type,
+                per_kecamatan : per_kecamatan,
                 page : page_current
             };
 
@@ -179,13 +256,59 @@
                 </div><!-- /.box-header -->
                 <div class="box-body ">
                 	<form id="form">
-                    <table border="0" width="550px">
+                    <table border="0">
                         <tr>
-                            <td width="300px" style="vertical-align: top;padding-top:5px">Tanggal</td>
+                            <td width="200px" style="vertical-align: top;padding-top:5px">Filter Type</td>
                             <td width="25px" style="vertical-align: top;padding-top:5px">:</td>
-                            <td width="150px" style="vertical-align: top"><input type="text" style="width: 200px" class="form-control input-sm datepicker" id="tgl_awal" name="tgl_awal" required="required"/></td>
+                            <td width="180px" style="vertical-align: top">
+                            	<select id="filter_type" name="filter_type" class="form-control input-sm">
+                            		<option value="period">Period</option>
+                            		<option value="bulan">Bulan</option>
+                            	</select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
+                        <tr id="period">
+                            <td width="200px" style="vertical-align: top;padding-top:5px">Tanggal</td>
+                            <td width="25px" style="vertical-align: top;padding-top:5px">:</td>
+                            <td width="180px" style="vertical-align: top"><input type="text" class="form-control input-sm datepicker" id="tgl_awal" name="tgl_awal" required="required"/></td>
                             <td width="25px" align="center" style="vertical-align: top;padding-top:5px">-</td>
-                            <td width="150px" style="vertical-align: top"><input type="text" style="width: 200px" class="form-control input-sm datepicker" id="tgl_akhir" name="tgl_akhir" required="required"/></td>
+                            <td width="180px" style="vertical-align: top"><input type="text" style="width: 180px" class="form-control input-sm datepicker" id="tgl_akhir" name="tgl_akhir" required="required"/></td>
+                        </tr>
+                        <tr id="bulan" style="display: none">
+                            <td width="200px" style="vertical-align: top;padding-top:5px">Bulan</td>
+                            <td width="25px" style="vertical-align: top;padding-top:5px">:</td>
+                            <td width="180px" style="vertical-align: top"><input type="text" class="form-control input-sm monthpicker" id="tgl_bulan" name="tgl_bulan" required="required"/></td>
+                            <td width="25px" align="center" style="vertical-align: top;padding-top:5px"></td>
+                            <td width="180px" style="vertical-align: top"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="200px" style="vertical-align: top;padding-top:5px">Per Type</td>
+                            <td width="25px" style="vertical-align: top;padding-top:5px">:</td>
+                            <td width="180px" style="vertical-align: top">
+                            	<select id="per_type" name="per_type" class="form-control input-sm">
+                            		<option value="yes">Yes</option>
+                            		<option value="no">No</option>
+                            	</select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td width="200px" style="vertical-align: top;padding-top:5px">Per Kecamatan</td>
+                            <td width="25px" style="vertical-align: top;padding-top:5px">:</td>
+                            <td width="180px" style="vertical-align: top">
+                            	<select id="per_kecamatan" name="per_kecamatan" class="form-control input-sm">
+                            		<option value="yes">Yes</option>
+                            		<option value="no">No</option>
+                            	</select>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="5">&nbsp;</td>
@@ -193,12 +316,18 @@
                         <tr>
                             <td>Jenis Perizinan</td>
                             <td>:</td>
-                            <td colspan="2">
+                            <td>
                                 <select class="form-control input-sm" id="jenis_perizinan" name="jenis_perizinan" required="required">
-                                    <option value="siup">Surat Izin Usaha Perdagangan</option>
+                                	<?php
+                                	foreach (getTabelJenisPerizinan() as $key => $value) {?>
+                                		<option value="<?=$key?>"><?=$value?></option>
+                                	<?php 
+                                	} 
+                                	?>
                                 </select>
                             </td>
-                            <td>&nbsp;&nbsp;&nbsp;<button type="button" id="filter_data" class="btn btn-info"><span class="fa fa-search">&nbsp;Cari</span></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="preview_data" class="btn btn-success"><span class="fa fa-print"></span></button>&nbsp;<button type="button" id="export_data" class="btn btn-primary"><span class="fa fa-file-word-o"></span></button></td>
+                            <td></td>
+                            <td width="300px">&nbsp;&nbsp;&nbsp;<button type="button" id="filter_data" class="btn btn-info"><span class="fa fa-search">&nbsp;Cari</span></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="preview_data" class="btn btn-success"><span class="fa fa-print"></span></button>&nbsp;<button type="button" id="export_data" class="btn btn-primary"><span class="fa fa-file-word-o"></span></button></td>
                         </tr>
                     </table>
                     </form>

@@ -1,8 +1,18 @@
+<html lang="en">
+<head>
+<title><?=$filename?></title>
+<link href='<?php echo base_url()?>inc/img/logos.png' rel='shortcut icon'>
 <style type="text/css">
+	body {  
+	    font-family: "Source Sans Pro",sans-serif  
+	}
+	@page {}
+     header { position: fixed; left: 0px; top: -180px; right: 0px; height: 150px; background-color: orange; text-align: center; }
+     footer { position: fixed; left: 0px; bottom: 0px; right: 0px; height: 30px; background-color: #d0d0d0; padding: 5px 0 5px}
+     footer .page:after { content: counter(page, upper-roman); }
+     
         .layout-report{
             width:100%;
-            height: auto;
-            overflow-x: scroll;
         }
 
         .tablereport th{
@@ -12,21 +22,18 @@
         .tablereport td{
             font-size:12px;
         }
+        p { page-break-after: always; }
+        .footer { position: fixed; bottom: 0px; right:0px; float:right;}
+      	.pagenum:before { content: counter(page); }
 </style>
-    
+</head>
+<body>
     <?php
-    if (!$type) {
-        $classnya = 'layout-report';
-        $align = 'left';
-    } else {
-        $classnya = 'layout-report2';
-        $align = 'center';
-    }
+       $classnya = 'layout-report';
+       $align = 'left';
     ?>
-    
-    <div class="<?php echo $classnya ?>">
-
-        <table align="<?php echo $align ?>" width="100%">
+	<div class="footer">Page: <span class="pagenum"></span></div>
+        <table width="100%">
             <tr>
                 <td width="100px"><img src="<?php echo base_url() ?>inc/img/logohp.jpg" width="100px" height="100px"></td>
                 <td valign="top" widht="600px"><strong>PEMERINTAHAN KOTA SERANG<br>BADAN PELAYANAN TERPADU DAN PENANAMAN MODAL</strong>
@@ -36,24 +43,19 @@
             <tr>
                 <td colspan="2"><hr></td>
             </tr>
-        </table><br>
-        <table align="<?php echo $align ?>" width="800px">
+        </table>
+        <center><strong>LAPORAN BULANAN KEGIATAN PELAYANAN</strong></center>
+        <table style="font-size: 13px">
             <tr>
-                <td align="center" colspan="4"><strong>LAPORAN BULANAN KEGIATAN PELAYANAN</strong></td>
+                <td colspan="4">&nbsp;</td>
             </tr>
             <tr>
-                <td>&nbsp;</td>
+                <td width="100">BIDANG</td>
+                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;PERIZINAN USAHA</td>
             </tr>
             <tr>
-                <td width="200px">BIDANG</td>
-                <td width="50px">:</td>
-                <td width="350px">PERIZINAN USAHA</td>
-                <td width="400px"></td>
-            </tr>
-            <tr>
-                <td><?=strtoupper($filter_type)?></td>
-                <td>:</td>
-                <td><?php
+                <td width="100"><?=strtoupper($filter_type)?></td>
+                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;<?php
                     if ($filter_type == 'bulan') {
                         echo convert_to_id_month($tgl_bulan);
                     } else {
@@ -62,16 +64,14 @@
                     ?></td>
             </tr>
             <tr>
-                <td>JENIS IZIN</td>
-                <td>:</td>
-                <td><?=strtoupper($nameIzin)?></td>
+                <td width="100">JENIS IZIN</td>
+                <td colspan="2">: &nbsp;&nbsp;&nbsp;&nbsp;<?=strtoupper($nameIzin)?></td>
             </tr>
         </table>
-        <br/>
-        <br/>
+        <br>
         <?php
         foreach ($results as $result) {?>
-        	<table align="<?php echo $align ?>" width="100%" style="margin-top: 10px">
+        	<table width="100%" style="font-size: 13px">
             <tr>
                 <td width="100px"><?=$title?></td>
                 <td width="50px">:</td>
@@ -79,23 +79,26 @@
             </tr>
             </table>
         	<br>
-	        <table align="<?php echo $align ?>" class="tablereport" width="1200" border="1" cellspacing="0" cellpadding="0">
-	            <tbody>
-	                <tr>
-	                    <th  width="50" rowspan="2" bgcolor="#E4E4E4" scope="col">NO</th>
+        	
+	        <table class="tablereport" border="1" cellspacing="0" cellpadding="0">
+	        	<thead>
+	        		<tr>
+	                    <th  width="30" rowspan="2" bgcolor="#E4E4E4" scope="col">NO</th>
 	                    <th  colspan="2" bgcolor="#E4E4E4" scope="col">PENDAFTARAN</th>
 	                    <th  colspan="2" bgcolor="#E4E4E4" scope="col">NAMA</th>
 	                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">ALAMAT</th>
-	                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KOTA</th>
-	                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KECAMATAN</th>
-	                    <th  width="150" rowspan="2" bgcolor="#E4E4E4" scope="col">KETERANGAN</th>
+	                    <th  width="50" rowspan="2" bgcolor="#E4E4E4" scope="col">KOTA</th>
+	                    <th  width="100" rowspan="2" bgcolor="#E4E4E4" scope="col">KECAMATAN</th>
+	                    <th  width="100" rowspan="2" bgcolor="#E4E4E4" scope="col">KETERANGAN</th>
 	                </tr>
 	                <tr>
-	                    <th  width="100" bgcolor="#E4E4E4" scope="col">TANGGAL</th>
-	                    <th  width="150" bgcolor="#E4E4E4" scope="col">NOMOR</th>
-	                    <th  width="150" bgcolor="#E4E4E4" scope="col">PERUSAHAAN</th>
-	                    <th  width="150" bgcolor="#E4E4E4" scope="col">PEMOHON</th>
+	                    <th  width="80" bgcolor="#E4E4E4" scope="col">TANGGAL</th>
+	                    <th  width="80" bgcolor="#E4E4E4" scope="col">NOMOR</th>
+	                    <th  width="80" bgcolor="#E4E4E4" scope="col">PERUSAHAAN</th>
+	                    <th  width="80" bgcolor="#E4E4E4" scope="col">PEMOHON</th>
 	                </tr>
+	        	</thead>
+	            <tbody>
 	                <?php
 	                foreach ($result['data'] as $child) {?>
 	                	<tr>
@@ -105,7 +108,7 @@
 	                	$i = $row_start;
 	                	foreach ($child['data'] as $r) {
 		                    ?>
-		                    <tr>
+			                    <tr>
 		                        <td style="padding: 5px"><?php echo $i ?></td>
 		                        <td style="padding: 5px"><?php echo convert_to_id($r['tgl_pembuatan'],FALSE) ?></td>
 		                        <td style="padding: 5px"><?php echo $r['no_pelayanan'] ?></td>
@@ -123,53 +126,50 @@
 	                ?>
 	            </tbody>
 	        </table>
-	        <br><br>
-	        
-	        <table width="1100px" align="<?php echo $align?>" style="margin-bottom: 10px">
+	        <br>
+	        <table width="100%" style="font-size: 13px">
 	            <tr>
 	                <td>KETERANGAN</td>
 	            </tr>
 	            <tr>
 	                <td width="200px">JUMLAH PELAYANAN</td>
-	                <td width="50px">:</td>
-	                <td width="400px"><?=$result['count']?> PELAYANAN</td>
-	                <td colspan="3"></td>
+	                <td width="400px">: &nbsp;&nbsp;&nbsp;<?=$result['count']?> PELAYANAN</td>
+	                <td colspan="2"></td>
 	            </tr>
 	        </table>
-	        <hr/>
-        <?php 
+	        <br/>
+	        <?php 
         } 
         ?>
-        <table width="1100px" align="<?php echo $align?>">
+        <table width="100%">
 	            <tr>
 	                <td>KETERANGAN</td>
 	            </tr>
 	            <tr>
-	                <td width="200px">JUMLAH SELURUH PELAYANAN</td>
-	                <td width="50px">:</td>
-	                <td width="400px"><span id="jumlah_pelayanan"></span> PELAYANAN</td>
-	                <td colspan="3">Serang</td>
+	                <td width="300px">JUMLAH SELURUH PELAYANAN</td>
+	                <td width="400px">: &nbsp;&nbsp;&nbsp;<?=$row_total?> PELAYANAN</td>
+	                <td colspan="2">Serang</td>
 	            </tr>
 	            <tr>
-	                <td colspan="3"></td>
+	                <td colspan="2"></td>
 	                <td colspan="3">-</td>
 	            </tr>
 	            <tr>
-	                <td colspan="3"></td>
+	                <td colspan="2"></td>
 	                <td colspan="3" align="center">Kepala Badan Pelayanan Terpadu dan Penanaman Modal<br>Kota Serang</td>
 	            </tr>
 	            <tr>
-	                <td colspan="3"></td>
-	                <td colspan="3"><br><br><br><br><br>&nbsp;</td>
+	                <td colspan="2"></td>
+	                <td colspan="3"><br><br><br>&nbsp;</td>
 	            </tr>
 	            <tr>
-	                <td colspan="3"></td>
+	                <td colspan="2"></td>
 	                <td colspan="3" align="center"><strong><u>MAMAT HAMBALI, SH. ,M.SI</u></strong></td>
 	            </tr>
 	            <tr>
-	                <td colspan="3"></td>
+	                <td colspan="2"></td>
 	                <td colspan="3" align="center">NIP : 19610704 198603 1 013</td>
 	            </tr>
 	        </table>
-    </div>
-    
+</body>
+</html>
